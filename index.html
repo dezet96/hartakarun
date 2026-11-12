@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🏴‍☠️ Treasure Hunt Coding</title>
+<!-- LIBRARY UNTUK SCAN KAMERA -->
+<script src="https://unpkg.com/html5-qrcode"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
@@ -39,6 +41,8 @@ body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
 .btn-secondary { background: transparent; color: #94a3b8;
   border: 2px solid #334155; font-size: 0.85em; padding: 10px; }
 .btn-secondary:hover { background: #334155; color: #e2e8f0; }
+.btn-scan { background: #0ea5e9; color: white; font-size: 1.1em; box-shadow: 0 4px 15px rgba(14,165,233,0.4);}
+.btn-scan:hover { background: #0284c7; }
 
 .error { background: #7f1d1d; border-left: 4px solid #dc2626;
   padding: 12px 15px; border-radius: 8px; margin-top: 12px;
@@ -99,10 +103,27 @@ body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
 .answer-preview { background: #0f172a; padding: 12px; border-radius: 8px;
   font-family: 'Consolas', monospace; color: #4ade80; white-space: pre-wrap;
   font-size: 0.85em; margin-top: 8px; border: 1px solid #16a34a; }
+
+/* MODAL SCANNER */
+#scanner-modal {
+  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(15, 23, 42, 0.95); z-index: 1000;
+  flex-direction: column; align-items: center; justify-content: center;
+  padding: 20px; backdrop-filter: blur(5px);
+}
+#reader { width: 100%; max-width: 400px; border-radius: 15px; overflow: hidden; border: 3px solid #fbbf24; background: black; }
+#reader video { object-fit: cover; }
 </style>
 </head>
 <body>
 <div class="container" id="app"></div>
+
+<!-- MODAL SCANNER -->
+<div id="scanner-modal">
+    <h2 style="color:#fbbf24; margin-bottom:20px; text-align:center;">📷 Arahkan Kamera ke QR Code</h2>
+    <div id="reader"></div>
+    <button class="btn btn-secondary" style="width:200px; margin-top:20px; background:#dc2626; color:white; border:none;" onclick="closeScanner()">Batal Scan</button>
+</div>
 
 <script>
 // ========== DATA ==========
@@ -310,6 +331,61 @@ function isStopUnlocked(grp, loc) {
   return isStopDone(grp, prevLoc);
 }
 
+// ============ KAMERA SCANNER ============
+let html5QrCode;
+
+function openScanner() {
+  document.getElementById('scanner-modal').style.display = 'flex';
+  
+  if (!html5QrCode) {
+    html5QrCode = new Html5Qrcode("reader");
+  }
+  
+  const config = { 
+    fps: 10, 
+    qrbox: { width: 250, height: 250 },
+    aspectRatio: 1.0
+  };
+  
+  html5QrCode.start(
+    { facingMode: "environment" }, 
+    config,
+    (decodedText) => {
+      // Callback saat QR berhasil di-scan
+      html5QrCode.stop().then(() => {
+        document.getElementById('scanner-modal').style.display = 'none';
+        // Cek apakah URL valid dari game kita
+        if (decodedText.includes('loc=') && decodedText.includes('grp=')) {
+          window.location.href = decodedText;
+        } else {
+          alert("QR Code tidak valid! Pastikan ini QR dari Treasure Hunt.");
+          openScanner(); // Buka lagi kameranya
+        }
+      }).catch((err) => console.error("Gagal stop scanner", err));
+    },
+    (errorMessage) => {
+      // Abaikan error pembacaan per frame
+    }
+  ).catch((err) => {
+    console.error(err);
+    alert("Gagal membuka kamera. Pastikan Anda mengizinkan akses kamera di browser.");
+    closeScanner();
+  });
+}
+
+function closeScanner() {
+  if (html5QrCode && html5QrCode.isScanning) {
+    html5QrCode.stop().then(() => {
+      document.getElementById('scanner-modal').style.display = 'none';
+    }).catch(err => {
+      console.error("Gagal stop scanner", err);
+      document.getElementById('scanner-modal').style.display = 'none';
+    });
+  } else {
+    document.getElementById('scanner-modal').style.display = 'none';
+  }
+}
+
 // ============ VALIDASI KODE C ============
 function validateCode(input, q) {
   const clean = input.toLowerCase().replace(/\s+/g, '');
@@ -495,8 +571,11 @@ function renderSuccess(grp, loc) {
     content += `<div style="background:#4c1d95;padding:25px;border-radius:12px;border:3px solid #8b5cf6;text-align:center;margin-top:15px;"><div style="font-size:1.5em;font-weight:bold;color:#e9d5ff;">🏆 SEMUA SELESAI! 🏆</div><div style="color:#c4b5fd;margin-top:10px;">Kembali ke titik start & serahkan lembar jawaban!</div></div>`;
   } else {
     content += `<div class="clue-box" style="margin-top:15px;"><div class="label">🗝️ CLUE BERIKUTNYA</div><div class="clue-text">${CLUE[parseInt(nextL.slice(1)) - 1]}</div></div>`;
+    
+    // TOMBOL SCAN LANGSUNG
+    content += `<button class="btn btn-scan" onclick="openScanner()">📷 Scan QR Lokasi Berikutnya</button>`;
   }
-  content += `<button class="btn" onclick="location.href='?'" style="margin-top:15px;">🏠 Kembali ke Dashboard</button></div>`;
+  content += `<button class="btn btn-secondary" onclick="location.href='?'" style="margin-top:15px;">🏠 Kembali ke Dashboard</button></div>`;
   app.innerHTML = content;
 }
 
@@ -514,6 +593,7 @@ function renderDoneView(grp, loc, progress) {
 
   if (!isLast) {
     content += `<div class="clue-box" style="margin-top:15px;"><div class="label">🗝️ CLUE BERIKUTNYA</div><div class="clue-text">${CLUE[parseInt(nextL.slice(1)) - 1]}</div></div>`;
+    content += `<button class="btn btn-scan" onclick="openScanner()">📷 Scan QR Lokasi Berikutnya</button>`;
   } else {
     content += `<div style="background:#4c1d95;padding:20px;border-radius:12px;border:3px solid #8b5cf6;text-align:center;margin-top:15px;"><div style="font-size:1.3em;font-weight:bold;color:#e9d5ff;">🏆 KAMU SUDAH SELESAI! 🏆</div></div>`;
   }
@@ -546,7 +626,7 @@ function renderDashboard(grp) {
       statusClass = 'current'; statusText = 'Kerjakan'; icon = '🎯';
     } else {
       statusClass = 'locked'; statusText = 'Terkunci'; icon = '🔒';
-      displayLocName = '??? (Rahasia)'; // MENYEMBUNYIKAN NAMA LOKASI
+      displayLocName = '??? (Rahasia)'; 
     }
 
     locList += `
@@ -602,6 +682,12 @@ function renderDashboard(grp) {
       </div>
 
       ${nextAction}
+      
+      <!-- TOMBOL SCAN UTAMA -->
+      <button class="btn btn-scan" style="margin-bottom:15px;" onclick="openScanner()">
+        📷 Buka Kamera & Scan QR
+      </button>
+
       <div class="loc-list">
         ${locList}
       </div>
