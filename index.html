@@ -123,7 +123,7 @@ const CLUE = [
 const KODE = { A:'A7X9', B:'B2K4', C:'C5M8', D:'D3P6', E:'E8N1',
                F:'F4R7', G:'G6T2', H:'H9W5', I:'I1Y3', J:'J7Z8' };
 
-// SOAL + VALIDASI KODE (Diperbaiki Menyeluruh)
+// SOAL + VALIDASI KODE
 const QUESTIONS = {
   L1: {
     A:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak deret angka 1 sampai 5 dalam satu baris (dipisah spasi).\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 4 5\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["1","5"], hint:"for(int i=1; i<=5; i++) { printf(\"%d \", i); }"},
@@ -310,7 +310,7 @@ function isStopUnlocked(grp, loc) {
   return isStopDone(grp, prevLoc);
 }
 
-// ============ VALIDASI KODE C (Diperbaiki Menyeluruh) ============
+// ============ VALIDASI KODE C ============
 function validateCode(input, q) {
   const clean = input.toLowerCase().replace(/\s+/g, '');
   if (!clean) return { ok: false, msg: "Kode tidak boleh kosong!" };
@@ -319,9 +319,8 @@ function validateCode(input, q) {
     return { ok: false, msg: "Kode kamu belum ada fungsi printf() untuk mencetak output." };
   }
 
-  // Deteksi perulangan
   let hasLoop = false;
-  let loopCount = (clean.match(/for/g) || []).length; // Hitung jumlah kata 'for'
+  let loopCount = (clean.match(/for/g) || []).length;
   
   if (q.type === 'for' && loopCount >= 1) hasLoop = true;
   if (q.type === 'while' && clean.includes('while')) hasLoop = true;
@@ -331,12 +330,10 @@ function validateCode(input, q) {
     return { ok: false, msg: `Kode kamu wajib menggunakan perulangan ${q.type.toUpperCase()}!` };
   }
 
-  // Cek jika soal meminta perulangan bersarang (Nested)
   if (q.nested && loopCount < 2) {
     return { ok: false, msg: "Soal ini membutuhkan perulangan FOR bersarang (nested). Pastikan ada 2 perulangan FOR di dalam kodemu." };
   }
 
-  // Cek kata kunci/angka/operator yang diminta
   for (let kw of q.req) { 
     if (!clean.includes(kw)) {
       return { ok: false, msg: `Kode kamu harus mengandung elemen '${kw}'.` }; 
@@ -540,19 +537,22 @@ function renderDashboard(grp) {
     const prevDone = i === 0 || progress[getLocForStop(grp, i)]?.done;
     const isCurrent = !isDone && prevDone;
     
-    let statusClass, statusText, icon;
+    let statusClass, statusText, icon, displayLocName;
+    displayLocName = LOKASI[L-1];
+
     if (isDone) {
       statusClass = 'done'; statusText = 'Selesai'; icon = '✅';
     } else if (isCurrent) {
       statusClass = 'current'; statusText = 'Kerjakan'; icon = '🎯';
     } else {
       statusClass = 'locked'; statusText = 'Terkunci'; icon = '🔒';
+      displayLocName = '??? (Rahasia)'; // MENYEMBUNYIKAN NAMA LOKASI
     }
 
     locList += `
       <div class="loc-item ${statusClass}">
         <div class="loc-name">
-          <span style="font-size:1.2em;">${icon}</span> Stop ${i+1} — ${LOKASI[L-1]}
+          <span style="font-size:1.2em;">${icon}</span> Stop ${i+1} — ${displayLocName}
         </div>
         <div class="status-badge">${statusText}</div>
       </div>`;
