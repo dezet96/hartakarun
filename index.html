@@ -18,13 +18,13 @@ body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
 .card h2 { color: #fbbf24; margin-bottom: 12px; font-size: 1.15em; }
 .card p { color: #cbd5e1; line-height: 1.6; margin-bottom: 10px; }
 
+/* INPUT & BUTTONS */
 .login-input { width: 100%; padding: 16px; font-size: 1.3em;
   text-align: center; letter-spacing: 8px; text-transform: uppercase;
   background: #0f172a; color: #fbbf24; border: 3px solid #334155;
   border-radius: 12px; font-family: monospace; font-weight: bold; }
 .login-input:focus { outline: none; border-color: #fbbf24; }
 
-/* KOTAK INPUT KODE */
 .answer-input { width: 100%; padding: 14px; font-size: 0.95em;
   background: #0f172a; color: #4ade80; border: 2px solid #334155;
   border-radius: 10px; font-family: 'Consolas', monospace; line-height: 1.5;
@@ -35,12 +35,13 @@ body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
 .btn { width: 100%; padding: 15px; font-size: 1em;
   background: #fbbf24; color: #1e293b; border: none;
   border-radius: 12px; cursor: pointer; font-weight: bold;
-  margin-top: 12px; }
+  margin-top: 12px; transition: 0.2s; }
 .btn:hover { background: #f59e0b; }
 .btn-secondary { background: transparent; color: #94a3b8;
   border: 2px solid #334155; font-size: 0.85em; padding: 10px; }
 .btn-secondary:hover { background: #334155; color: #e2e8f0; }
 
+/* KOTAK INFORMASI */
 .error { background: #7f1d1d; border-left: 4px solid #dc2626;
   padding: 12px 15px; border-radius: 8px; margin-top: 12px;
   color: #fecaca; font-size: 0.9em; }
@@ -55,8 +56,8 @@ body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
   border-left: 4px solid #0ea5e9; margin-bottom: 15px; }
 .soal-box .label { color: #7dd3fc; font-size: 0.8em;
   text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-.soal-box .pertanyaan { font-size: 1.05em; line-height: 1.6;
-  color: #f1f5f9; white-space: pre-wrap; }
+.soal-box .pertanyaan { font-size: 0.95em; line-height: 1.6;
+  color: #f1f5f9; white-space: pre-wrap; font-family: monospace; }
 
 .clue-box { background: #78350f; padding: 18px; border-radius: 10px;
   border-left: 4px solid #f59e0b; margin-top: 12px; }
@@ -69,24 +70,38 @@ body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
   border-radius: 25px; font-weight: bold; display: inline-block;
   margin-bottom: 12px; font-size: 1em; }
 
-.progress-bar { background: #334155; height: 22px; border-radius: 12px;
-  overflow: hidden; margin: 12px 0; }
+/* DASHBOARD PROGRESS BAR BARU */
+.progress-container { margin-bottom: 20px; }
+.progress-text { display: flex; justify-content: space-between; font-size: 0.85em; color: #94a3b8; margin-bottom: 6px; font-weight: bold;}
+.progress-bar { background: #0f172a; height: 24px; border-radius: 12px;
+  overflow: hidden; border: 1px solid #334155; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
 .progress-fill { background: linear-gradient(90deg, #fbbf24, #f59e0b);
-  height: 100%; transition: width 0.5s; display: flex;
+  height: 100%; transition: width 0.6s ease-in-out; display: flex;
   align-items: center; justify-content: center;
   font-size: 0.75em; font-weight: bold; color: #1e293b; }
 
-.loc-item { background: #0f172a; padding: 10px 14px; border-radius: 8px;
+/* DASHBOARD DAFTAR LOKASI BARU */
+.loc-list { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
+.loc-item { background: #0f172a; padding: 12px 15px; border-radius: 10px;
   display: flex; justify-content: space-between; align-items: center;
-  border-left: 3px solid #475569; margin-bottom: 6px; font-size: 0.9em; }
-.loc-item.done { border-left-color: #16a34a; background: #052e16; }
-.loc-item.current { border-left-color: #fbbf24; background: #451a03;
-  animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.75; } }
+  border-left: 4px solid #475569; font-size: 0.95em; transition: 0.3s;}
+.loc-item .loc-name { display: flex; align-items: center; gap: 10px; font-weight: 500;}
+.loc-item .status-badge { font-size: 0.75em; padding: 4px 8px; border-radius: 6px; font-weight: bold;}
 
-.attempt-badge { background: #475569; color: #cbd5e1;
-  padding: 4px 10px; border-radius: 12px; font-size: 0.75em;
-  display: inline-block; margin-left: 8px; }
+/* Status: Selesai */
+.loc-item.done { border-left-color: #16a34a; background: #052e16; opacity: 0.8;}
+.loc-item.done .status-badge { background: #16a34a; color: white; }
+
+/* Status: Sedang Dikerjakan (Current) */
+.loc-item.current { border-left-color: #fbbf24; background: #451a03;
+  transform: scale(1.02); box-shadow: 0 4px 12px rgba(251,191,36,0.2); }
+.loc-item.current .status-badge { background: #fbbf24; color: #1e293b; animation: pulse 2s infinite; }
+
+/* Status: Terkunci */
+.loc-item.locked { border-left-color: #334155; color: #64748b; }
+.loc-item.locked .status-badge { background: #334155; color: #94a3b8; }
+
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
 
 .answer-preview { background: #0f172a; padding: 12px; border-radius: 8px;
   font-family: 'Consolas', monospace; color: #4ade80; white-space: pre-wrap;
@@ -115,137 +130,133 @@ const CLUE = [
 const KODE = { A:'A7X9', B:'B2K4', C:'C5M8', D:'D3P6', E:'E8N1',
                F:'F4R7', G:'G6T2', H:'H9W5', I:'I1Y3', J:'J7Z8' };
 
-// SOAL + VALIDASI KODE
-// type: jenis perulangan yang WAJIB ada
-// req: teks/angka yang WAJIB ada di dalam kode
+// SOAL + VALIDASI KODE (Format Teks Lebih Detail)
 const QUESTIONS = {
   L1: {
-    A:{text:"Cetak 1 2 3 4 5 pakai FOR", type:"for", req:["1","5"], hint:"for (int i=1; i<=5; i++) { printf(\"%d \", i); }"},
-    B:{text:"Cetak 2 4 6 8 10 pakai FOR", type:"for", req:["2","10"], hint:"for (int i=2; i<=10; i+=2) { printf(\"%d \", i); }"},
-    C:{text:"Cetak 1 3 5 7 9 pakai FOR", type:"for", req:["1","9"], hint:"for (int i=1; i<=9; i+=2) { printf(\"%d \", i); }"},
-    D:{text:"Cetak 5 4 3 2 1 pakai FOR (mundur)", type:"for", req:["5","1"], hint:"for (int i=5; i>=1; i--) { printf(\"%d \", i); }"},
-    E:{text:"Cetak 3 6 9 12 15 pakai FOR", type:"for", req:["3","15"], hint:"for (int i=3; i<=15; i+=3) { printf(\"%d \", i); }"},
-    F:{text:"Cetak 10 8 6 4 2 pakai FOR (mundur)", type:"for", req:["10","2"], hint:"for (int i=10; i>=2; i-=2) { printf(\"%d \", i); }"},
-    G:{text:"Cetak 1 2 3 4 5 6 pakai FOR", type:"for", req:["1","6"], hint:"for (int i=1; i<=6; i++) { printf(\"%d \", i); }"},
-    H:{text:"Cetak 2 4 6 8 pakai FOR", type:"for", req:["2","8"], hint:"for (int i=2; i<=8; i+=2) { printf(\"%d \", i); }"},
-    I:{text:"Cetak 1 3 5 7 9 11 pakai FOR", type:"for", req:["1","11"], hint:"for (int i=1; i<=11; i+=2) { printf(\"%d \", i); }"},
-    J:{text:"Cetak 1 sampai 10 pakai FOR", type:"for", req:["1","10"], hint:"for (int i=1; i<=10; i++) { printf(\"%d \", i); }"}
+    A:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak deret angka 1 sampai 5 dalam satu baris (dipisah spasi).\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 4 5\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["1","5"], hint:"for(int i=1; i<=5; i++) { printf(\"%d \", i); }"},
+    B:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak bilangan genap dari 2 sampai 10 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 4 6 8 10\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["2","10"], hint:"for(int i=2; i<=10; i+=2) { printf(\"%d \", i); }"},
+    C:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak bilangan ganjil dari 1 sampai 9 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 3 5 7 9\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["1","9"], hint:"for(int i=1; i<=9; i+=2) { printf(\"%d \", i); }"},
+    D:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka mundur dari 5 ke 1 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n5 4 3 2 1\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["5","1"], hint:"for(int i=5; i>=1; i--) { printf(\"%d \", i); }"},
+    E:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak kelipatan 3 dari 3 sampai 15 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n3 6 9 12 15\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["3","15"], hint:"for(int i=3; i<=15; i+=3) { printf(\"%d \", i); }"},
+    F:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka genap mundur dari 10 ke 2 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n10 8 6 4 2\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["10","2"], hint:"for(int i=10; i>=2; i-=2) { printf(\"%d \", i); }"},
+    G:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka 1 sampai 6 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 4 5 6\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["1","6"], hint:"for(int i=1; i<=6; i++) { printf(\"%d \", i); }"},
+    H:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak bilangan genap dari 2 sampai 8 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 4 6 8\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["2","8"], hint:"for(int i=2; i<=8; i+=2) { printf(\"%d \", i); }"},
+    I:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak bilangan ganjil dari 1 sampai 11 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 3 5 7 9 11\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["1","11"], hint:"for(int i=1; i<=11; i+=2) { printf(\"%d \", i); }"},
+    J:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka 1 sampai 10 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 4 5 6 7 8 9 10\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["1","10"], hint:"for(int i=1; i<=10; i++) { printf(\"%d \", i); }"}
   },
   L2: {
-    A:{text:"Hitung 1+2+3+4+5 pakai FOR. Cetak: 'Jumlah = [hasil]'", type:"for", req:["jumlah","15"], hint:"int jml=0; for(int i=1;i<=5;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
-    B:{text:"Hitung 1..7 pakai FOR. Cetak: 'Jumlah = [hasil]'", type:"for", req:["jumlah","28"], hint:"int jml=0; for(int i=1;i<=7;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
-    C:{text:"Hitung 1..10 pakai FOR. Cetak: 'Jumlah = [hasil]'", type:"for", req:["jumlah","55"], hint:"int jml=0; for(int i=1;i<=10;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
-    D:{text:"Hitung 1+2+3 pakai FOR. Cetak: 'Jumlah = [hasil]'", type:"for", req:["jumlah","6"], hint:"int jml=0; for(int i=1;i<=3;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
-    E:{text:"Hitung 1..6 pakai FOR. Cetak: 'Jumlah = [hasil]'", type:"for", req:["jumlah","21"], hint:"int jml=0; for(int i=1;i<=6;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
-    F:{text:"Hitung 1..8 pakai FOR. Cetak: 'Jumlah = [hasil]'", type:"for", req:["jumlah","36"], hint:"int jml=0; for(int i=1;i<=8;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
-    G:{text:"Hitung 1..9 pakai FOR. Cetak: 'Jumlah = [hasil]'", type:"for", req:["jumlah","45"], hint:"int jml=0; for(int i=1;i<=9;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
-    H:{text:"Hitung 1+2+3+4 pakai FOR. Cetak: 'Jumlah = [hasil]'", type:"for", req:["jumlah","10"], hint:"int jml=0; for(int i=1;i<=4;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
-    I:{text:"Hitung 1..12 pakai FOR. Cetak: 'Jumlah = [hasil]'", type:"for", req:["jumlah","78"], hint:"int jml=0; for(int i=1;i<=12;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
-    J:{text:"Hitung 1..15 pakai FOR. Cetak: 'Jumlah = [hasil]'", type:"for", req:["jumlah","120"], hint:"int jml=0; for(int i=1;i<=15;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"}
+    A:{text:"📌 INSTRUKSI:\nHitung penjumlahan deret 1+2+3+4+5.\n\n💻 OUTPUT YANG DIHARAPKAN:\nJumlah = 15\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR untuk menghitung total.", type:"for", req:["jumlah","15"], hint:"int jml=0; for(int i=1;i<=5;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
+    B:{text:"📌 INSTRUKSI:\nHitung penjumlahan deret dari 1 sampai 7.\n\n💻 OUTPUT YANG DIHARAPKAN:\nJumlah = 28\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["jumlah","28"], hint:"int jml=0; for(int i=1;i<=7;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
+    C:{text:"📌 INSTRUKSI:\nHitung penjumlahan deret dari 1 sampai 10.\n\n💻 OUTPUT YANG DIHARAPKAN:\nJumlah = 55\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["jumlah","55"], hint:"int jml=0; for(int i=1;i<=10;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
+    D:{text:"📌 INSTRUKSI:\nHitung penjumlahan deret 1+2+3.\n\n💻 OUTPUT YANG DIHARAPKAN:\nJumlah = 6\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["jumlah","6"], hint:"int jml=0; for(int i=1;i<=3;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
+    E:{text:"📌 INSTRUKSI:\nHitung penjumlahan deret dari 1 sampai 6.\n\n💻 OUTPUT YANG DIHARAPKAN:\nJumlah = 21\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["jumlah","21"], hint:"int jml=0; for(int i=1;i<=6;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
+    F:{text:"📌 INSTRUKSI:\nHitung penjumlahan deret dari 1 sampai 8.\n\n💻 OUTPUT YANG DIHARAPKAN:\nJumlah = 36\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["jumlah","36"], hint:"int jml=0; for(int i=1;i<=8;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
+    G:{text:"📌 INSTRUKSI:\nHitung penjumlahan deret dari 1 sampai 9.\n\n💻 OUTPUT YANG DIHARAPKAN:\nJumlah = 45\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["jumlah","45"], hint:"int jml=0; for(int i=1;i<=9;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
+    H:{text:"📌 INSTRUKSI:\nHitung penjumlahan deret 1+2+3+4.\n\n💻 OUTPUT YANG DIHARAPKAN:\nJumlah = 10\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["jumlah","10"], hint:"int jml=0; for(int i=1;i<=4;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
+    I:{text:"📌 INSTRUKSI:\nHitung penjumlahan deret dari 1 sampai 12.\n\n💻 OUTPUT YANG DIHARAPKAN:\nJumlah = 78\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["jumlah","78"], hint:"int jml=0; for(int i=1;i<=12;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"},
+    J:{text:"📌 INSTRUKSI:\nHitung penjumlahan deret dari 1 sampai 15.\n\n💻 OUTPUT YANG DIHARAPKAN:\nJumlah = 120\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["jumlah","120"], hint:"int jml=0; for(int i=1;i<=15;i++){jml+=i;} printf(\"Jumlah = %d\", jml);"}
   },
   L3: {
-    A:{text:"Tabel perkalian 3 (1-5). Format: '3 x 1 = 3'", type:"for", req:["3","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"3 x %d = %d\\n\", i, 3*i); }"},
-    B:{text:"Tabel perkalian 4 (1-5)", type:"for", req:["4","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"4 x %d = %d\\n\", i, 4*i); }"},
-    C:{text:"Tabel perkalian 5 (1-5)", type:"for", req:["5","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"5 x %d = %d\\n\", i, 5*i); }"},
-    D:{text:"Tabel perkalian 6 (1-5)", type:"for", req:["6","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"6 x %d = %d\\n\", i, 6*i); }"},
-    E:{text:"Tabel perkalian 7 (1-5)", type:"for", req:["7","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"7 x %d = %d\\n\", i, 7*i); }"},
-    F:{text:"Tabel perkalian 8 (1-5)", type:"for", req:["8","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"8 x %d = %d\\n\", i, 8*i); }"},
-    G:{text:"Tabel perkalian 9 (1-5)", type:"for", req:["9","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"9 x %d = %d\\n\", i, 9*i); }"},
-    H:{text:"Tabel perkalian 2 (1-5)", type:"for", req:["2","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"2 x %d = %d\\n\", i, 2*i); }"},
-    I:{text:"Tabel perkalian 10 (1-5)", type:"for", req:["10","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"10 x %d = %d\\n\", i, 10*i); }"},
-    J:{text:"Tabel perkalian 11 (1-5)", type:"for", req:["11","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"11 x %d = %d\\n\", i, 11*i); }"}
+    A:{text:"📌 INSTRUKSI:\nBuat tabel perkalian 3 dari 1 sampai 5.\n\n💻 OUTPUT YANG DIHARAPKAN:\n3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n\n⚙️ KETENTUAN:\nGunakan perulangan FOR.", type:"for", req:["3","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"3 x %d = %d\\n\", i, 3*i); }"},
+    B:{text:"📌 INSTRUKSI:\nBuat tabel perkalian 4 dari 1 sampai 5.\n\n💻 OUTPUT YANG DIHARAPKAN:\n4 x 1 = 4\n4 x 2 = 8\n4 x 3 = 12\n4 x 4 = 16\n4 x 5 = 20\n\n⚙️ KETENTUAN:\nGunakan perulangan FOR.", type:"for", req:["4","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"4 x %d = %d\\n\", i, 4*i); }"},
+    C:{text:"📌 INSTRUKSI:\nBuat tabel perkalian 5 dari 1 sampai 5.\n\n💻 OUTPUT YANG DIHARAPKAN:\n5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25\n\n⚙️ KETENTUAN:\nGunakan perulangan FOR.", type:"for", req:["5","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"5 x %d = %d\\n\", i, 5*i); }"},
+    D:{text:"📌 INSTRUKSI:\nBuat tabel perkalian 6 dari 1 sampai 5.\n\n💻 OUTPUT YANG DIHARAPKAN:\n6 x 1 = 6\n6 x 2 = 12\n... (sampai 6 x 5 = 30)\n\n⚙️ KETENTUAN:\nGunakan perulangan FOR.", type:"for", req:["6","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"6 x %d = %d\\n\", i, 6*i); }"},
+    E:{text:"📌 INSTRUKSI:\nBuat tabel perkalian 7 dari 1 sampai 5.\n\n💻 OUTPUT YANG DIHARAPKAN:\n7 x 1 = 7\n7 x 2 = 14\n... (sampai 7 x 5 = 35)\n\n⚙️ KETENTUAN:\nGunakan perulangan FOR.", type:"for", req:["7","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"7 x %d = %d\\n\", i, 7*i); }"},
+    F:{text:"📌 INSTRUKSI:\nBuat tabel perkalian 8 dari 1 sampai 5.\n\n💻 OUTPUT YANG DIHARAPKAN:\n8 x 1 = 8\n8 x 2 = 16\n... (sampai 8 x 5 = 40)\n\n⚙️ KETENTUAN:\nGunakan perulangan FOR.", type:"for", req:["8","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"8 x %d = %d\\n\", i, 8*i); }"},
+    G:{text:"📌 INSTRUKSI:\nBuat tabel perkalian 9 dari 1 sampai 5.\n\n💻 OUTPUT YANG DIHARAPKAN:\n9 x 1 = 9\n9 x 2 = 18\n... (sampai 9 x 5 = 45)\n\n⚙️ KETENTUAN:\nGunakan perulangan FOR.", type:"for", req:["9","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"9 x %d = %d\\n\", i, 9*i); }"},
+    H:{text:"📌 INSTRUKSI:\nBuat tabel perkalian 2 dari 1 sampai 5.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 x 1 = 2\n2 x 2 = 4\n... (sampai 2 x 5 = 10)\n\n⚙️ KETENTUAN:\nGunakan perulangan FOR.", type:"for", req:["2","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"2 x %d = %d\\n\", i, 2*i); }"},
+    I:{text:"📌 INSTRUKSI:\nBuat tabel perkalian 10 dari 1 sampai 5.\n\n💻 OUTPUT YANG DIHARAPKAN:\n10 x 1 = 10\n10 x 2 = 20\n... (sampai 10 x 5 = 50)\n\n⚙️ KETENTUAN:\nGunakan perulangan FOR.", type:"for", req:["10","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"10 x %d = %d\\n\", i, 10*i); }"},
+    J:{text:"📌 INSTRUKSI:\nBuat tabel perkalian 11 dari 1 sampai 5.\n\n💻 OUTPUT YANG DIHARAPKAN:\n11 x 1 = 11\n11 x 2 = 22\n... (sampai 11 x 5 = 55)\n\n⚙️ KETENTUAN:\nGunakan perulangan FOR.", type:"for", req:["11","1","5"], hint:"for(int i=1;i<=5;i++){ printf(\"11 x %d = %d\\n\", i, 11*i); }"}
   },
   L4: {
-    A:{text:"Cetak 1 sampai 5 pakai WHILE", type:"while", req:["1","5"], hint:"int i=1; while(i<=5){ printf(\"%d \", i); i++; }"},
-    B:{text:"Cetak 1 sampai 7 pakai WHILE", type:"while", req:["1","7"], hint:"int i=1; while(i<=7){ printf(\"%d \", i); i++; }"},
-    C:{text:"Cetak 1 sampai 10 pakai WHILE", type:"while", req:["1","10"], hint:"int i=1; while(i<=10){ printf(\"%d \", i); i++; }"},
-    D:{text:"Cetak 1 sampai 8 pakai WHILE", type:"while", req:["1","8"], hint:"int i=1; while(i<=8){ printf(\"%d \", i); i++; }"},
-    E:{text:"Cetak 1 sampai 6 pakai WHILE", type:"while", req:["1","6"], hint:"int i=1; while(i<=6){ printf(\"%d \", i); i++; }"},
-    F:{text:"Cetak 1 sampai 9 pakai WHILE", type:"while", req:["1","9"], hint:"int i=1; while(i<=9){ printf(\"%d \", i); i++; }"},
-    G:{text:"Cetak 1 sampai 4 pakai WHILE", type:"while", req:["1","4"], hint:"int i=1; while(i<=4){ printf(\"%d \", i); i++; }"},
-    H:{text:"Cetak 1 sampai 12 pakai WHILE", type:"while", req:["1","12"], hint:"int i=1; while(i<=12){ printf(\"%d \", i); i++; }"},
-    I:{text:"Cetak 1 sampai 3 pakai WHILE", type:"while", req:["1","3"], hint:"int i=1; while(i<=3){ printf(\"%d \", i); i++; }"},
-    J:{text:"Cetak 1 sampai 15 pakai WHILE", type:"while", req:["1","15"], hint:"int i=1; while(i<=15){ printf(\"%d \", i); i++; }"}
+    A:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka 1 sampai 5 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 4 5\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["1","5"], hint:"int i=1; while(i<=5){ printf(\"%d \", i); i++; }"},
+    B:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka 1 sampai 7 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 4 5 6 7\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["1","7"], hint:"int i=1; while(i<=7){ printf(\"%d \", i); i++; }"},
+    C:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka 1 sampai 10 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 4 5 6 7 8 9 10\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["1","10"], hint:"int i=1; while(i<=10){ printf(\"%d \", i); i++; }"},
+    D:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka 1 sampai 8 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 4 5 6 7 8\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["1","8"], hint:"int i=1; while(i<=8){ printf(\"%d \", i); i++; }"},
+    E:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka 1 sampai 6 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 4 5 6\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["1","6"], hint:"int i=1; while(i<=6){ printf(\"%d \", i); i++; }"},
+    F:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka 1 sampai 9 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 4 5 6 7 8 9\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["1","9"], hint:"int i=1; while(i<=9){ printf(\"%d \", i); i++; }"},
+    G:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka 1 sampai 4 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 4\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["1","4"], hint:"int i=1; while(i<=4){ printf(\"%d \", i); i++; }"},
+    H:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka 1 sampai 12 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 ... 12\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["1","12"], hint:"int i=1; while(i<=12){ printf(\"%d \", i); i++; }"},
+    I:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka 1 sampai 3 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["1","3"], hint:"int i=1; while(i<=3){ printf(\"%d \", i); i++; }"},
+    J:{text:"📌 INSTRUKSI:\nBuatlah program C untuk mencetak angka 1 sampai 15 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n1 2 3 ... 15\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["1","15"], hint:"int i=1; while(i<=15){ printf(\"%d \", i); i++; }"}
   },
   L5: {
-    A:{text:"Countdown 5 ke 1, lalu 'Go!' (WHILE)", type:"while", req:["5","go"], hint:"int n=5; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
-    B:{text:"Countdown 7 ke 1, lalu 'Go!' (WHILE)", type:"while", req:["7","go"], hint:"int n=7; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
-    C:{text:"Countdown 10 ke 1, lalu 'Go!' (WHILE)", type:"while", req:["10","go"], hint:"int n=10; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
-    D:{text:"Countdown 8 ke 1, lalu 'Go!' (WHILE)", type:"while", req:["8","go"], hint:"int n=8; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
-    E:{text:"Countdown 6 ke 1, lalu 'Go!' (WHILE)", type:"while", req:["6","go"], hint:"int n=6; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
-    F:{text:"Countdown 9 ke 1, lalu 'Go!' (WHILE)", type:"while", req:["9","go"], hint:"int n=9; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
-    G:{text:"Countdown 4 ke 1, lalu 'Go!' (WHILE)", type:"while", req:["4","go"], hint:"int n=4; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
-    H:{text:"Countdown 12 ke 1, lalu 'Go!' (WHILE)", type:"while", req:["12","go"], hint:"int n=12; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
-    I:{text:"Countdown 3 ke 1, lalu 'Go!' (WHILE)", type:"while", req:["3","go"], hint:"int n=3; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
-    J:{text:"Countdown 15 ke 1, lalu 'Go!' (WHILE)", type:"while", req:["15","go"], hint:"int n=15; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"}
+    A:{text:"📌 INSTRUKSI:\nBuat hitung mundur (countdown) dari 5 sampai 1, lalu cetak teks 'Go!' di akhir.\n\n💻 OUTPUT YANG DIHARAPKAN:\n5 4 3 2 1 Go!\n\n⚙️ KETENTUAN:\nGunakan perulangan WHILE.", type:"while", req:["5","go"], hint:"int n=5; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
+    B:{text:"📌 INSTRUKSI:\nBuat hitung mundur dari 7 sampai 1, lalu cetak 'Go!'.\n\n💻 OUTPUT YANG DIHARAPKAN:\n7 6 5 4 3 2 1 Go!\n\n⚙️ KETENTUAN:\nGunakan perulangan WHILE.", type:"while", req:["7","go"], hint:"int n=7; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
+    C:{text:"📌 INSTRUKSI:\nBuat hitung mundur dari 10 sampai 1, lalu cetak 'Go!'.\n\n💻 OUTPUT YANG DIHARAPKAN:\n10 9 8 ... 1 Go!\n\n⚙️ KETENTUAN:\nGunakan perulangan WHILE.", type:"while", req:["10","go"], hint:"int n=10; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
+    D:{text:"📌 INSTRUKSI:\nBuat hitung mundur dari 8 sampai 1, lalu cetak 'Go!'.\n\n💻 OUTPUT YANG DIHARAPKAN:\n8 7 6 5 4 3 2 1 Go!\n\n⚙️ KETENTUAN:\nGunakan perulangan WHILE.", type:"while", req:["8","go"], hint:"int n=8; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
+    E:{text:"📌 INSTRUKSI:\nBuat hitung mundur dari 6 sampai 1, lalu cetak 'Go!'.\n\n💻 OUTPUT YANG DIHARAPKAN:\n6 5 4 3 2 1 Go!\n\n⚙️ KETENTUAN:\nGunakan perulangan WHILE.", type:"while", req:["6","go"], hint:"int n=6; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
+    F:{text:"📌 INSTRUKSI:\nBuat hitung mundur dari 9 sampai 1, lalu cetak 'Go!'.\n\n💻 OUTPUT YANG DIHARAPKAN:\n9 8 7 ... 1 Go!\n\n⚙️ KETENTUAN:\nGunakan perulangan WHILE.", type:"while", req:["9","go"], hint:"int n=9; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
+    G:{text:"📌 INSTRUKSI:\nBuat hitung mundur dari 4 sampai 1, lalu cetak 'Go!'.\n\n💻 OUTPUT YANG DIHARAPKAN:\n4 3 2 1 Go!\n\n⚙️ KETENTUAN:\nGunakan perulangan WHILE.", type:"while", req:["4","go"], hint:"int n=4; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
+    H:{text:"📌 INSTRUKSI:\nBuat hitung mundur dari 12 sampai 1, lalu cetak 'Go!'.\n\n💻 OUTPUT YANG DIHARAPKAN:\n12 11 10 ... 1 Go!\n\n⚙️ KETENTUAN:\nGunakan perulangan WHILE.", type:"while", req:["12","go"], hint:"int n=12; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
+    I:{text:"📌 INSTRUKSI:\nBuat hitung mundur dari 3 sampai 1, lalu cetak 'Go!'.\n\n💻 OUTPUT YANG DIHARAPKAN:\n3 2 1 Go!\n\n⚙️ KETENTUAN:\nGunakan perulangan WHILE.", type:"while", req:["3","go"], hint:"int n=3; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"},
+    J:{text:"📌 INSTRUKSI:\nBuat hitung mundur dari 15 sampai 1, lalu cetak 'Go!'.\n\n💻 OUTPUT YANG DIHARAPKAN:\n15 14 13 ... 1 Go!\n\n⚙️ KETENTUAN:\nGunakan perulangan WHILE.", type:"while", req:["15","go"], hint:"int n=15; while(n>0){ printf(\"%d \", n); n--; } printf(\"Go!\");"}
   },
   L6: {
-    A:{text:"Cetak genap 2 sampai 10 (WHILE)", type:"while", req:["2","10"], hint:"int i=2; while(i<=10){ printf(\"%d \", i); i+=2; }"},
-    B:{text:"Cetak genap 2 sampai 20 (WHILE)", type:"while", req:["2","20"], hint:"int i=2; while(i<=20){ printf(\"%d \", i); i+=2; }"},
-    C:{text:"Cetak genap 2 sampai 30 (WHILE)", type:"while", req:["2","30"], hint:"int i=2; while(i<=30){ printf(\"%d \", i); i+=2; }"},
-    D:{text:"Cetak genap 2 sampai 24 (WHILE)", type:"while", req:["2","24"], hint:"int i=2; while(i<=24){ printf(\"%d \", i); i+=2; }"},
-    E:{text:"Cetak genap 2 sampai 14 (WHILE)", type:"while", req:["2","14"], hint:"int i=2; while(i<=14){ printf(\"%d \", i); i+=2; }"},
-    F:{text:"Cetak genap 2 sampai 40 (WHILE)", type:"while", req:["2","40"], hint:"int i=2; while(i<=40){ printf(\"%d \", i); i+=2; }"},
-    G:{text:"Cetak genap 2 sampai 8 (WHILE)", type:"while", req:["2","8"], hint:"int i=2; while(i<=8){ printf(\"%d \", i); i+=2; }"},
-    H:{text:"Cetak genap 2 sampai 18 (WHILE)", type:"while", req:["2","18"], hint:"int i=2; while(i<=18){ printf(\"%d \", i); i+=2; }"},
-    I:{text:"Cetak genap 2 sampai 12 (WHILE)", type:"while", req:["2","12"], hint:"int i=2; while(i<=12){ printf(\"%d \", i); i+=2; }"},
-    J:{text:"Cetak genap 2 sampai 50 (WHILE)", type:"while", req:["2","50"], hint:"int i=2; while(i<=50){ printf(\"%d \", i); i+=2; }"}
+    A:{text:"📌 INSTRUKSI:\nCetak bilangan genap dari 2 sampai 10 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 4 6 8 10\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["2","10"], hint:"int i=2; while(i<=10){ printf(\"%d \", i); i+=2; }"},
+    B:{text:"📌 INSTRUKSI:\nCetak bilangan genap dari 2 sampai 20 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 4 6 ... 20\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["2","20"], hint:"int i=2; while(i<=20){ printf(\"%d \", i); i+=2; }"},
+    C:{text:"📌 INSTRUKSI:\nCetak bilangan genap dari 2 sampai 30 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 4 6 ... 30\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["2","30"], hint:"int i=2; while(i<=30){ printf(\"%d \", i); i+=2; }"},
+    D:{text:"📌 INSTRUKSI:\nCetak bilangan genap dari 2 sampai 24 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 4 6 ... 24\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["2","24"], hint:"int i=2; while(i<=24){ printf(\"%d \", i); i+=2; }"},
+    E:{text:"📌 INSTRUKSI:\nCetak bilangan genap dari 2 sampai 14 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 4 6 ... 14\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["2","14"], hint:"int i=2; while(i<=14){ printf(\"%d \", i); i+=2; }"},
+    F:{text:"📌 INSTRUKSI:\nCetak bilangan genap dari 2 sampai 40 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 4 6 ... 40\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["2","40"], hint:"int i=2; while(i<=40){ printf(\"%d \", i); i+=2; }"},
+    G:{text:"📌 INSTRUKSI:\nCetak bilangan genap dari 2 sampai 8 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 4 6 8\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["2","8"], hint:"int i=2; while(i<=8){ printf(\"%d \", i); i+=2; }"},
+    H:{text:"📌 INSTRUKSI:\nCetak bilangan genap dari 2 sampai 18 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 4 6 ... 18\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["2","18"], hint:"int i=2; while(i<=18){ printf(\"%d \", i); i+=2; }"},
+    I:{text:"📌 INSTRUKSI:\nCetak bilangan genap dari 2 sampai 12 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 4 6 8 10 12\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["2","12"], hint:"int i=2; while(i<=12){ printf(\"%d \", i); i+=2; }"},
+    J:{text:"📌 INSTRUKSI:\nCetak bilangan genap dari 2 sampai 50 dalam satu baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n2 4 6 ... 50\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["2","50"], hint:"int i=2; while(i<=50){ printf(\"%d \", i); i+=2; }"}
   },
   L7: {
-    A:{text:"DO-WHILE: Jika PIN 1111, cetak 'Selamat datang Admin!'", type:"do", req:["1111","admin"], hint:"int pin=0; do { pin++; } while(pin != 1111); printf(\"Selamat datang Admin!\");"},
-    B:{text:"DO-WHILE: Jika PIN 2222, cetak 'Akses diterima!'", type:"do", req:["2222","akses"], hint:"int pin=0; do { pin++; } while(pin != 2222); printf(\"Akses diterima!\");"},
-    C:{text:"DO-WHILE: Jika PIN 1234, cetak 'Login sukses!'", type:"do", req:["1234","sukses"], hint:"int pin=0; do { pin++; } while(pin != 1234); printf(\"Login sukses!\");"},
-    D:{text:"DO-WHILE: Jika PIN 9999, cetak 'Verifikasi OK!'", type:"do", req:["9999","ok"], hint:"int pin=0; do { pin++; } while(pin != 9999); printf(\"Verifikasi OK!\");"},
-    E:{text:"DO-WHILE: Jika PIN 5555, cetak 'Halo User!'", type:"do", req:["5555","halo"], hint:"int pin=0; do { pin++; } while(pin != 5555); printf(\"Halo User!\");"},
-    F:{text:"DO-WHILE: Jika PIN 7777, cetak 'Selamat datang!'", type:"do", req:["7777","selamat"], hint:"int pin=0; do { pin++; } while(pin != 7777); printf(\"Selamat datang!\");"},
-    G:{text:"DO-WHILE: Jika PIN 4444, cetak 'PIN benar!'", type:"do", req:["4444","benar"], hint:"int pin=0; do { pin++; } while(pin != 4444); printf(\"PIN benar!\");"},
-    H:{text:"DO-WHILE: Jika PIN 4321, cetak 'Akses granted!'", type:"do", req:["4321","granted"], hint:"int pin=0; do { pin++; } while(pin != 4321); printf(\"Akses granted!\");"},
-    I:{text:"DO-WHILE: Jika PIN 8765, cetak 'Berhasil masuk!'", type:"do", req:["8765","berhasil"], hint:"int pin=0; do { pin++; } while(pin != 8765); printf(\"Berhasil masuk!\");"},
-    J:{text:"DO-WHILE: Jika PIN 3333, cetak 'Login berhasil!'", type:"do", req:["3333","berhasil"], hint:"int pin=0; do { pin++; } while(pin != 3333); printf(\"Login berhasil!\");"}
+    A:{text:"📌 INSTRUKSI:\nBuat simulasi login. Gunakan DO-WHILE untuk meminta PIN. Jika PIN bernilai 1111, cetak 'Selamat datang Admin!'.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["1111","admin"], hint:"int pin; do { pin=1111; } while(pin != 1111); printf(\"Selamat datang Admin!\");"},
+    B:{text:"📌 INSTRUKSI:\nBuat simulasi login. Gunakan DO-WHILE meminta PIN. Jika PIN bernilai 2222, cetak 'Akses diterima!'.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["2222","akses"], hint:"int pin; do { pin=2222; } while(pin != 2222); printf(\"Akses diterima!\");"},
+    C:{text:"📌 INSTRUKSI:\nBuat simulasi login. Gunakan DO-WHILE meminta PIN. Jika PIN bernilai 1234, cetak 'Login sukses!'.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["1234","sukses"], hint:"int pin; do { pin=1234; } while(pin != 1234); printf(\"Login sukses!\");"},
+    D:{text:"📌 INSTRUKSI:\nBuat simulasi login. Gunakan DO-WHILE meminta PIN. Jika PIN bernilai 9999, cetak 'Verifikasi OK!'.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["9999","ok"], hint:"int pin; do { pin=9999; } while(pin != 9999); printf(\"Verifikasi OK!\");"},
+    E:{text:"📌 INSTRUKSI:\nBuat simulasi login. Gunakan DO-WHILE meminta PIN. Jika PIN bernilai 5555, cetak 'Halo User!'.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["5555","halo"], hint:"int pin; do { pin=5555; } while(pin != 5555); printf(\"Halo User!\");"},
+    F:{text:"📌 INSTRUKSI:\nBuat simulasi login. Gunakan DO-WHILE meminta PIN. Jika PIN bernilai 7777, cetak 'Selamat datang!'.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["7777","selamat"], hint:"int pin; do { pin=7777; } while(pin != 7777); printf(\"Selamat datang!\");"},
+    G:{text:"📌 INSTRUKSI:\nBuat simulasi login. Gunakan DO-WHILE meminta PIN. Jika PIN bernilai 4444, cetak 'PIN benar!'.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["4444","benar"], hint:"int pin; do { pin=4444; } while(pin != 4444); printf(\"PIN benar!\");"},
+    H:{text:"📌 INSTRUKSI:\nBuat simulasi login. Gunakan DO-WHILE meminta PIN. Jika PIN bernilai 4321, cetak 'Akses granted!'.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["4321","granted"], hint:"int pin; do { pin=4321; } while(pin != 4321); printf(\"Akses granted!\");"},
+    I:{text:"📌 INSTRUKSI:\nBuat simulasi login. Gunakan DO-WHILE meminta PIN. Jika PIN bernilai 8765, cetak 'Berhasil masuk!'.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["8765","berhasil"], hint:"int pin; do { pin=8765; } while(pin != 8765); printf(\"Berhasil masuk!\");"},
+    J:{text:"📌 INSTRUKSI:\nBuat simulasi login. Gunakan DO-WHILE meminta PIN. Jika PIN bernilai 3333, cetak 'Login berhasil!'.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["3333","berhasil"], hint:"int pin; do { pin=3333; } while(pin != 3333); printf(\"Login berhasil!\");"}
   },
   L8: {
-    A:{text:"Menu DO-WHILE: 1.Sapa ('Halo!'), 2.Keluar", type:"do", req:["halo","keluar"], hint:"int p=0; do { p++; } while(p != 2); printf(\"Halo!\");"},
-    B:{text:"Menu DO-WHILE: 1.Info ('Sekolah ABC'), 2.Keluar", type:"do", req:["sekolah","keluar"], hint:"int p=0; do { p++; } while(p != 2); printf(\"Sekolah ABC\");"},
-    C:{text:"Menu DO-WHILE: 1.Hitung ('Menghitung...'), 2.Keluar", type:"do", req:["menghitung","keluar"], hint:"int p=0; do { p++; } while(p != 2); printf(\"Menghitung...\");"},
-    D:{text:"Menu DO-WHILE: 1.Tambah ('Menambah'), 2.Kurang, 3.Keluar", type:"do", req:["menambah","keluar"], hint:"int p=0; do { p++; } while(p != 3); printf(\"Menambah\");"},
-    E:{text:"Menu DO-WHILE: 1.Info ('Info sekolah'), 2.Keluar", type:"do", req:["info","keluar"], hint:"int p=0; do { p++; } while(p != 2); printf(\"Info sekolah\");"},
-    F:{text:"Menu DO-WHILE: 1.Sapa ('Hai!'), 2.Hitung, 3.Keluar", type:"do", req:["hai","keluar"], hint:"int p=0; do { p++; } while(p != 3); printf(\"Hai!\");"},
-    G:{text:"Menu DO-WHILE: 1.Sapa ('Halo teman!'), 2.Info, 3.Hitung, 4.Keluar", type:"do", req:["halo","keluar"], hint:"int p=0; do { p++; } while(p != 4); printf(\"Halo teman!\");"},
-    H:{text:"Menu DO-WHILE: 1.Tambah ('Penjumlahan'), 2.Kurang, 3.Kali, 4.Keluar", type:"do", req:["penjumlahan","keluar"], hint:"int p=0; do { p++; } while(p != 4); printf(\"Penjumlahan\");"},
-    I:{text:"Menu DO-WHILE: 1.Tambah ('Plus'), 2.Kali, 3.Keluar", type:"do", req:["plus","keluar"], hint:"int p=0; do { p++; } while(p != 3); printf(\"Plus\");"},
-    J:{text:"Menu DO-WHILE: 1.Sapa ('Hai semua!'), 2.Hitung, 3.Info, 4.Keluar", type:"do", req:["hai","keluar"], hint:"int p=0; do { p++; } while(p != 4); printf(\"Hai semua!\");"}
+    A:{text:"📌 INSTRUKSI:\nBuat menu interaktif menggunakan DO-WHILE.\nPilihan 1: Sapa (cetak 'Halo!').\nPilihan 2: Keluar.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["halo","keluar"], hint:"int p; do { p=2; } while(p != 2); printf(\"Halo!\");"},
+    B:{text:"📌 INSTRUKSI:\nBuat menu interaktif menggunakan DO-WHILE.\nPilihan 1: Info (cetak 'Sekolah ABC').\nPilihan 2: Keluar.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["sekolah","keluar"], hint:"int p; do { p=2; } while(p != 2); printf(\"Sekolah ABC\");"},
+    C:{text:"📌 INSTRUKSI:\nBuat menu interaktif menggunakan DO-WHILE.\nPilihan 1: Hitung (cetak 'Menghitung...').\nPilihan 2: Keluar.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["menghitung","keluar"], hint:"int p; do { p=2; } while(p != 2); printf(\"Menghitung...\");"},
+    D:{text:"📌 INSTRUKSI:\nBuat menu interaktif DO-WHILE.\n1: Tambah (cetak 'Menambah').\n2: Kurang (cetak 'Mengurangi').\n3: Keluar.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["menambah","keluar"], hint:"int p; do { p=3; } while(p != 3); printf(\"Menambah\");"},
+    E:{text:"📌 INSTRUKSI:\nBuat menu interaktif DO-WHILE.\n1: Info (cetak 'Info sekolah').\n2: Keluar.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["info","keluar"], hint:"int p; do { p=2; } while(p != 2); printf(\"Info sekolah\");"},
+    F:{text:"📌 INSTRUKSI:\nBuat menu interaktif DO-WHILE.\n1: Sapa (cetak 'Hai!').\n2: Hitung (cetak 'Hitung').\n3: Keluar.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["hai","keluar"], hint:"int p; do { p=3; } while(p != 3); printf(\"Hai!\");"},
+    G:{text:"📌 INSTRUKSI:\nBuat menu interaktif DO-WHILE.\n1: Sapa (cetak 'Halo teman!').\n2: Info.\n3: Hitung.\n4: Keluar.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["halo","keluar"], hint:"int p; do { p=4; } while(p != 4); printf(\"Halo teman!\");"},
+    H:{text:"📌 INSTRUKSI:\nBuat menu interaktif DO-WHILE.\n1: Tambah (cetak 'Penjumlahan').\n2: Kurang.\n3: Kali.\n4: Keluar.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["penjumlahan","keluar"], hint:"int p; do { p=4; } while(p != 4); printf(\"Penjumlahan\");"},
+    I:{text:"📌 INSTRUKSI:\nBuat menu interaktif DO-WHILE.\n1: Tambah (cetak 'Plus').\n2: Kali (cetak 'Kali').\n3: Keluar.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["plus","keluar"], hint:"int p; do { p=3; } while(p != 3); printf(\"Plus\");"},
+    J:{text:"📌 INSTRUKSI:\nBuat menu interaktif DO-WHILE.\n1: Sapa (cetak 'Hai semua!').\n2: Hitung.\n3: Info.\n4: Keluar.\n\n⚙️ KETENTUAN:\nGunakan DO-WHILE.", type:"do", req:["hai","keluar"], hint:"int p; do { p=4; } while(p != 4); printf(\"Hai semua!\");"}
   },
   L9: {
-    A:{text:"Pola bintang 3 baris (FOR nested)", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=3; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
-    B:{text:"Pola bintang 4 baris (FOR nested)", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=4; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
-    C:{text:"Pola bintang 5 baris (FOR nested)", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=5; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
-    D:{text:"Pola bintang 6 baris (FOR nested)", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=6; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
-    E:{text:"Pola bintang 2 baris (FOR nested)", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=2; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
-    F:{text:"Pola bintang 7 baris (FOR nested)", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=7; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
-    G:{text:"Pola bintang 8 baris (FOR nested)", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=8; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
-    H:{text:"Pola bintang 9 baris (FOR nested)", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=9; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
-    I:{text:"Pola bintang 10 baris (FOR nested)", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=10; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
-    J:{text:"Pola bintang 5 baris TERBALIK (FOR nested)", type:"for", req:["*","i","j"], hint:"for(int i=5; i>=1; i--){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"}
+    A:{text:"📌 INSTRUKSI:\nBuat pola bintang segitiga siku-siku setinggi 3 baris.\n\n💻 OUTPUT YANG DIHARAPKAN:\n*\n**\n***\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR bersarang (nested).", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=3; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
+    B:{text:"📌 INSTRUKSI:\nBuat pola bintang segitiga siku-siku setinggi 4 baris.\n\n⚙️ KETENTUAN:\nWajib menggunakan FOR bersarang.", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=4; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
+    C:{text:"📌 INSTRUKSI:\nBuat pola bintang segitiga siku-siku setinggi 5 baris.\n\n⚙️ KETENTUAN:\nWajib menggunakan FOR bersarang.", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=5; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
+    D:{text:"📌 INSTRUKSI:\nBuat pola bintang segitiga siku-siku setinggi 6 baris.\n\n⚙️ KETENTUAN:\nWajib menggunakan FOR bersarang.", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=6; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
+    E:{text:"📌 INSTRUKSI:\nBuat pola bintang segitiga siku-siku setinggi 2 baris.\n\n⚙️ KETENTUAN:\nWajib menggunakan FOR bersarang.", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=2; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
+    F:{text:"📌 INSTRUKSI:\nBuat pola bintang segitiga siku-siku setinggi 7 baris.\n\n⚙️ KETENTUAN:\nWajib menggunakan FOR bersarang.", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=7; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
+    G:{text:"📌 INSTRUKSI:\nBuat pola bintang segitiga siku-siku setinggi 8 baris.\n\n⚙️ KETENTUAN:\nWajib menggunakan FOR bersarang.", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=8; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
+    H:{text:"📌 INSTRUKSI:\nBuat pola bintang segitiga siku-siku setinggi 9 baris.\n\n⚙️ KETENTUAN:\nWajib menggunakan FOR bersarang.", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=9; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
+    I:{text:"📌 INSTRUKSI:\nBuat pola bintang segitiga siku-siku setinggi 10 baris.\n\n⚙️ KETENTUAN:\nWajib menggunakan FOR bersarang.", type:"for", req:["*","i","j"], hint:"for(int i=1; i<=10; i++){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"},
+    J:{text:"📌 INSTRUKSI:\nBuat pola bintang segitiga siku-siku TERBALIK setinggi 5 baris (mulai dari 5 bintang memudar ke 1).\n\n💻 OUTPUT YANG DIHARAPKAN:\n*****\n****\n***\n**\n*\n\n⚙️ KETENTUAN:\nWajib menggunakan FOR bersarang.", type:"for", req:["*","i","j"], hint:"for(int i=5; i>=1; i--){ for(int j=1; j<=i; j++){ printf(\"*\"); } printf(\"\\n\"); }"}
   },
   L10: {
-    A:{text:"Hitung 3! pakai FOR. Cetak: 'Hasil = [x]'", type:"for", req:["hasil","6"], hint:"int r=1; for(int i=1;i<=3;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
-    B:{text:"Hitung 4! pakai FOR. Cetak: 'Hasil = [x]'", type:"for", req:["hasil","24"], hint:"int r=1; for(int i=1;i<=4;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
-    C:{text:"Hitung 5! pakai FOR. Cetak: 'Hasil = [x]'", type:"for", req:["hasil","120"], hint:"int r=1; for(int i=1;i<=5;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
-    D:{text:"Hitung 6! pakai FOR. Cetak: 'Hasil = [x]'", type:"for", req:["hasil","720"], hint:"int r=1; for(int i=1;i<=6;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
-    E:{text:"Hitung 2! pakai FOR. Cetak: 'Hasil = [x]'", type:"for", req:["hasil","2"], hint:"int r=1; for(int i=1;i<=2;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
-    F:{text:"Hitung 7! pakai FOR. Cetak: 'Hasil = [x]'", type:"for", req:["hasil","5040"], hint:"int r=1; for(int i=1;i<=7;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
-    G:{text:"Hitung 8! pakai FOR. Cetak: 'Hasil = [x]'", type:"for", req:["hasil","40320"], hint:"int r=1; for(int i=1;i<=8;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
-    H:{text:"Hitung 3! pakai WHILE. Cetak: 'Hasil = [x]'", type:"while", req:["hasil","6"], hint:"int r=1, i=1; while(i<=3){ r*=i; i++; } printf(\"Hasil = %d\", r);"},
-    I:{text:"Hitung 5! pakai WHILE. Cetak: 'Hasil = [x]'", type:"while", req:["hasil","120"], hint:"int r=1, i=1; while(i<=5){ r*=i; i++; } printf(\"Hasil = %d\", r);"},
-    J:{text:"Hitung 6! pakai DO-WHILE. Cetak: 'Hasil = [x]'", type:"do", req:["hasil","720"], hint:"int r=1, i=1; do{ r*=i; i++; }while(i<=6); printf(\"Hasil = %d\", r);"}
+    A:{text:"📌 INSTRUKSI:\nHitung nilai faktorial dari 3! (3 faktorial).\nCetak hasilnya dengan format 'Hasil = [angka]'.\n\n💻 OUTPUT YANG DIHARAPKAN:\nHasil = 6\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["hasil","6"], hint:"int r=1; for(int i=1;i<=3;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
+    B:{text:"📌 INSTRUKSI:\nHitung nilai faktorial dari 4!.\nCetak dengan format 'Hasil = [angka]'.\n\n💻 OUTPUT YANG DIHARAPKAN:\nHasil = 24\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["hasil","24"], hint:"int r=1; for(int i=1;i<=4;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
+    C:{text:"📌 INSTRUKSI:\nHitung nilai faktorial dari 5!.\nCetak dengan format 'Hasil = [angka]'.\n\n💻 OUTPUT YANG DIHARAPKAN:\nHasil = 120\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["hasil","120"], hint:"int r=1; for(int i=1;i<=5;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
+    D:{text:"📌 INSTRUKSI:\nHitung nilai faktorial dari 6!.\nCetak dengan format 'Hasil = [angka]'.\n\n💻 OUTPUT YANG DIHARAPKAN:\nHasil = 720\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["hasil","720"], hint:"int r=1; for(int i=1;i<=6;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
+    E:{text:"📌 INSTRUKSI:\nHitung nilai faktorial dari 2!.\nCetak dengan format 'Hasil = [angka]'.\n\n💻 OUTPUT YANG DIHARAPKAN:\nHasil = 2\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["hasil","2"], hint:"int r=1; for(int i=1;i<=2;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
+    F:{text:"📌 INSTRUKSI:\nHitung nilai faktorial dari 7!.\nCetak dengan format 'Hasil = [angka]'.\n\n💻 OUTPUT YANG DIHARAPKAN:\nHasil = 5040\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["hasil","5040"], hint:"int r=1; for(int i=1;i<=7;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
+    G:{text:"📌 INSTRUKSI:\nHitung nilai faktorial dari 8!.\nCetak dengan format 'Hasil = [angka]'.\n\n💻 OUTPUT YANG DIHARAPKAN:\nHasil = 40320\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan FOR.", type:"for", req:["hasil","40320"], hint:"int r=1; for(int i=1;i<=8;i++){ r*=i; } printf(\"Hasil = %d\", r);"},
+    H:{text:"📌 INSTRUKSI:\nHitung nilai faktorial dari 3!.\nCetak dengan format 'Hasil = [angka]'.\n\n💻 OUTPUT YANG DIHARAPKAN:\nHasil = 6\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["hasil","6"], hint:"int r=1, i=1; while(i<=3){ r*=i; i++; } printf(\"Hasil = %d\", r);"},
+    I:{text:"📌 INSTRUKSI:\nHitung nilai faktorial dari 5!.\nCetak dengan format 'Hasil = [angka]'.\n\n💻 OUTPUT YANG DIHARAPKAN:\nHasil = 120\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan WHILE.", type:"while", req:["hasil","120"], hint:"int r=1, i=1; while(i<=5){ r*=i; i++; } printf(\"Hasil = %d\", r);"},
+    J:{text:"📌 INSTRUKSI:\nHitung nilai faktorial dari 6!.\nCetak dengan format 'Hasil = [angka]'.\n\n💻 OUTPUT YANG DIHARAPKAN:\nHasil = 720\n\n⚙️ KETENTUAN:\nWajib menggunakan perulangan DO-WHILE.", type:"do", req:["hasil","720"], hint:"int r=1, i=1; do{ r*=i; i++; }while(i<=6); printf(\"Hasil = %d\", r);"}
   }
 };
 
 // START & ROUTING HELPERS
 const START_LOC = {};
-['A','B','C','D','E','F','G','H','I','J'].forEach((g,i) => {
-  START_LOC[g] = 'L' + (i + 1);
-});
+['A','B','C','D','E','F','G','H','I','J'].forEach((g,i) => { START_LOC[g] = 'L' + (i + 1); });
 
 function getStopNum(grp, loc) {
   const L = parseInt(loc.slice(1));
@@ -264,10 +275,7 @@ function getNextLoc(loc) {
 
 // ============ SESSION ============
 function getSession() {
-  try {
-    const s = localStorage.getItem('hunt_session');
-    if (s) return JSON.parse(s);
-  } catch (e) {}
+  try { const s = localStorage.getItem('hunt_session'); if (s) return JSON.parse(s); } catch (e) {}
   return window._memSession || null;
 }
 function setSession(grp) {
@@ -276,36 +284,24 @@ function setSession(grp) {
   try { localStorage.setItem('hunt_session', JSON.stringify(data)); } catch (e) {}
 }
 function clearSession() {
-  window._memSession = null;
-  window._memProgress = {};
-  try {
-    localStorage.removeItem('hunt_session');
-    localStorage.removeItem('hunt_progress');
-  } catch (e) {}
+  window._memSession = null; window._memProgress = {};
+  try { localStorage.removeItem('hunt_session'); localStorage.removeItem('hunt_progress'); } catch (e) {}
 }
 function logout() {
-  if (confirm('Logout? Progress akan hilang.')) {
-    clearSession();
-    renderLogin('', '');
-  }
+  if (confirm('Logout? Progress akan hilang.')) { clearSession(); renderLogin('', ''); }
 }
 
 // ============ PROGRESS ============
 function getProgress(grp) {
   let fromStorage = {};
-  try {
-    const all = JSON.parse(localStorage.getItem('hunt_progress') || '{}');
-    fromStorage = all[grp] || {};
-  } catch (e) {}
+  try { const all = JSON.parse(localStorage.getItem('hunt_progress') || '{}'); fromStorage = all[grp] || {}; } catch (e) {}
   const fromMem = (window._memProgress || {})[grp] || {};
   return { ...fromStorage, ...fromMem };
 }
 function saveProgress(grp, loc, data) {
   if (!window._memProgress) window._memProgress = {};
   if (!window._memProgress[grp]) window._memProgress[grp] = {};
-  window._memProgress[grp][loc] = {
-    ...(window._memProgress[grp][loc] || {}), ...data, updatedAt: Date.now()
-  };
+  window._memProgress[grp][loc] = { ...(window._memProgress[grp][loc] || {}), ...data, updatedAt: Date.now() };
   try {
     const all = JSON.parse(localStorage.getItem('hunt_progress') || '{}');
     if (!all[grp]) all[grp] = {};
@@ -313,9 +309,7 @@ function saveProgress(grp, loc, data) {
     localStorage.setItem('hunt_progress', JSON.stringify(all));
   } catch (e) {}
 }
-function isStopDone(grp, loc) {
-  return getProgress(grp)[loc]?.done === true;
-}
+function isStopDone(grp, loc) { return getProgress(grp)[loc]?.done === true; }
 function isStopUnlocked(grp, loc) {
   const stop = getStopNum(grp, loc);
   if (stop === 1) return true;
@@ -325,33 +319,17 @@ function isStopUnlocked(grp, loc) {
 
 // ============ VALIDASI KODE C ============
 function validateCode(input, q) {
-  // Hapus semua spasi, enter, dan ubah ke huruf kecil untuk pengecekan
   const clean = input.toLowerCase().replace(/\s+/g, '');
-  
   if (!clean) return { ok: false, msg: "Kode tidak boleh kosong!" };
+  if (!clean.includes('printf')) return { ok: false, msg: "Kode kamu belum ada fungsi printf() untuk mencetak output." };
 
-  // 1. Wajib ada printf
-  if (!clean.includes('printf')) {
-    return { ok: false, msg: "Kode kamu belum ada fungsi printf() untuk mencetak output." };
-  }
-
-  // 2. Wajib pakai perulangan yang diminta
   let hasLoop = false;
   if (q.type === 'for' && clean.includes('for')) hasLoop = true;
   if (q.type === 'while' && clean.includes('while')) hasLoop = true;
   if (q.type === 'do' && clean.includes('do') && clean.includes('while')) hasLoop = true;
-  
-  if (!hasLoop) {
-    return { ok: false, msg: `Kode kamu wajib menggunakan perulangan ${q.type.toUpperCase()}!` };
-  }
+  if (!hasLoop) return { ok: false, msg: `Kode kamu wajib menggunakan perulangan ${q.type.toUpperCase()}!` };
 
-  // 3. Cek kata kunci angka/teks yang diminta
-  for (let kw of q.req) {
-    if (!clean.includes(kw)) {
-      return { ok: false, msg: `Kode kamu harus mengandung '${kw}'.` };
-    }
-  }
-
+  for (let kw of q.req) { if (!clean.includes(kw)) return { ok: false, msg: `Kode kamu harus mengandung angka/kata '${kw}'.` }; }
   return { ok: true };
 }
 
@@ -362,35 +340,23 @@ const urlLoc = (params.get('loc') || '').toUpperCase();
 const urlGrp = (params.get('grp') || '').toUpperCase();
 const session = getSession();
 
-if (!session) {
-  renderLogin(urlLoc, urlGrp);
-} else {
-  renderAfterLogin(session.group);
-}
+if (!session) { renderLogin(urlLoc, urlGrp); } else { renderAfterLogin(session.group); }
 
 function renderLogin(pendingLoc, pendingGrp) {
   let pending = '';
   if (pendingLoc && pendingGrp) {
-    pending = `<div style="background:#0c4a6e;padding:10px;border-radius:8px;
-      margin-bottom:12px;border-left:3px solid #0ea5e9;color:#7dd3fc;
-      font-size:0.85em;">📍 QR untuk Kelompok <strong>${pendingGrp}</strong>
-      terdeteksi. Login dulu.</div>`;
+    pending = `<div style="background:#0c4a6e;padding:10px;border-radius:8px;margin-bottom:12px;border-left:3px solid #0ea5e9;color:#7dd3fc;font-size:0.85em;">📍 QR untuk Kelompok <strong>${pendingGrp}</strong> terdeteksi. Login dulu.</div>`;
   }
   app.innerHTML = `
-    <div class="header"><h1>🏴‍☠️ TREASURE HUNT</h1>
-      <div class="sub">Belajar Perulangan Bahasa C</div></div>
+    <div class="header"><h1>🏴‍☠️ TREASURE HUNT</h1><div class="sub">Belajar Perulangan Bahasa C</div></div>
     <div class="card">
-      <h2>🔑 Login Kelompok</h2>
-      ${pending}
-      <p style="font-size:0.9em;color:#94a3b8;">
-        Masukkan kode verifikasi dari kartu kelompokmu.</p>
-      <input type="text" class="login-input" id="pwdInput"
-             placeholder="A7X9" maxlength="8" autocomplete="off">
+      <h2>🔑 Login Kelompok</h2>${pending}
+      <p style="font-size:0.9em;color:#94a3b8;">Masukkan kode verifikasi dari kartu kelompokmu.</p>
+      <input type="text" class="login-input" id="pwdInput" placeholder="A7X9" maxlength="8" autocomplete="off">
       <button class="btn" onclick="handleLogin()">🔓 Masuk</button>
       <div id="loginError"></div>
     </div>`;
-  const inp = document.getElementById('pwdInput');
-  inp.focus();
+  const inp = document.getElementById('pwdInput'); inp.focus();
   inp.addEventListener('keypress', e => { if (e.key === 'Enter') handleLogin(); });
 }
 
@@ -398,64 +364,35 @@ function handleLogin() {
   const rawVal = document.getElementById('pwdInput').value || '';
   const input = rawVal.replace(/\s+/g, '').toUpperCase();
   const errEl = document.getElementById('loginError');
-
   if (!input) { errEl.innerHTML = '<div class="error">❌ Masukkan kode dulu!</div>'; return; }
 
   let grp = null;
   for (const k in KODE) { if (KODE[k] === input) { grp = k; break; } }
-
   if (!grp) {
-    errEl.innerHTML = `<div class="error">
-      ❌ Kode "<strong>${input}</strong>" tidak dikenali!<br>
-      <small style="opacity:0.85;">Kode valid: A7X9, B2K4, C5M8, D3P6, E8N1,
-      F4R7, G6T2, H9W5, I1Y3, J7Z8</small><br>
-      Periksa kembali kartu kelompokmu.</div>`;
-    document.getElementById('pwdInput').value = '';
-    document.getElementById('pwdInput').focus();
-    return;
+    errEl.innerHTML = `<div class="error">❌ Kode "<strong>${input}</strong>" tidak dikenali!<br><small style="opacity:0.85;">Kode valid: A7X9, B2K4, C5M8, D3P6, E8N1, F4R7, G6T2, H9W5, I1Y3, J7Z8</small><br>Periksa kembali kartu kelompokmu.</div>`;
+    document.getElementById('pwdInput').value = ''; document.getElementById('pwdInput').focus(); return;
   }
-
   if (urlGrp && urlGrp !== grp) {
-    errEl.innerHTML = `<div class="error">
-      ❌ QR ini untuk Kelompok <strong>${urlGrp}</strong>,
-      tapi kamu memasukkan kode untuk Kelompok <strong>${grp}</strong>.<br><br>
-      Cari QR dengan kode <strong>${KODE[grp]}</strong> di sekitarmu.</div>`;
+    errEl.innerHTML = `<div class="error">❌ QR ini untuk Kelompok <strong>${urlGrp}</strong>, tapi kamu memasukkan kode untuk Kelompok <strong>${grp}</strong>.<br><br>Cari QR dengan kode <strong>${KODE[grp]}</strong> di sekitarmu.</div>`;
     return;
   }
-
-  setSession(grp);
-  renderAfterLogin(grp);
+  setSession(grp); renderAfterLogin(grp);
 }
 
 function renderAfterLogin(grp) {
   if (urlLoc && urlGrp) {
-    if (urlGrp !== grp) {
-      renderWrongQR(grp, urlGrp, urlLoc);
-    } else if (!isStopUnlocked(grp, urlLoc)) {
-      renderLocked(grp, urlLoc);
-    } else {
-      renderQuestion(grp, urlLoc);
-    }
-  } else {
-    renderDashboard(grp);
-  }
+    if (urlGrp !== grp) { renderWrongQR(grp, urlGrp, urlLoc); }
+    else if (!isStopUnlocked(grp, urlLoc)) { renderLocked(grp, urlLoc); }
+    else { renderQuestion(grp, urlLoc); }
+  } else { renderDashboard(grp); }
 }
 
 function renderWrongQR(myGrp, qrGrp, loc) {
   app.innerHTML = `
     <div class="header"><h1>⚠️ SALAH QR!</h1></div>
     <div class="card" style="border: 3px solid #dc2626;">
-      <div style="text-align:center;margin-bottom:15px;">
-        <div class="group-badge">KAMU: KELOMPOK ${myGrp} (${KODE[myGrp]})</div>
-      </div>
-      <div class="error" style="font-size:0.95em;padding:18px;">
-        <strong>❌ QR ini BUKAN untukmu!</strong><br><br>
-        QR milik: <strong>Kelompok ${qrGrp} (${KODE[qrGrp]})</strong><br>
-        Kamu Kelompok <strong>${myGrp}</strong>.<br><br>
-        Cari QR dengan kode
-        <strong style="color:#fbbf24;font-size:1.15em;">${KODE[myGrp]}</strong>
-        di lokasi ini.
-      </div>
+      <div style="text-align:center;margin-bottom:15px;"><div class="group-badge">KAMU: KELOMPOK ${myGrp} (${KODE[myGrp]})</div></div>
+      <div class="error" style="font-size:0.95em;padding:18px;"><strong>❌ QR ini BUKAN untukmu!</strong><br><br>QR milik: <strong>Kelompok ${qrGrp} (${KODE[qrGrp]})</strong><br>Kamu Kelompok <strong>${myGrp}</strong>.<br><br>Cari QR dengan kode <strong style="color:#fbbf24;font-size:1.15em;">${KODE[myGrp]}</strong> di lokasi ini.</div>
       <button class="btn btn-secondary" onclick="location.href='?'">🏠 Dashboard</button>
     </div>`;
 }
@@ -467,13 +404,7 @@ function renderLocked(grp, loc) {
   app.innerHTML = `
     <div class="header"><h1>🔒 BELUM BISA DIBUKA</h1></div>
     <div class="card" style="border: 3px solid #f59e0b;">
-      <div class="error" style="background:#451a03;border-left-color:#fbbf24;
-           color:#fed7aa;">
-        <strong>⚠️ Kamu belum menyelesaikan stop sebelumnya!</strong><br><br>
-        Ini adalah <strong>Stop ${stop}</strong>.<br>
-        Selesaikan dulu <strong>Stop ${stop - 1}</strong> di
-        <strong>${LOKASI[prevIdx]}</strong>.
-      </div>
+      <div class="error" style="background:#451a03;border-left-color:#fbbf24;color:#fed7aa;"><strong>⚠️ Kamu belum menyelesaikan stop sebelumnya!</strong><br><br>Ini adalah <strong>Stop ${stop}</strong>.<br>Selesaikan dulu <strong>Stop ${stop - 1}</strong> di <strong>${LOKASI[prevIdx]}</strong>.</div>
       <button class="btn btn-secondary" onclick="location.href='?'">🏠 Dashboard</button>
     </div>`;
 }
@@ -483,7 +414,6 @@ function renderQuestion(grp, loc) {
   const stop = getStopNum(grp, loc);
   const q = QUESTIONS['L' + L][grp];
   const progress = getProgress(grp)[loc] || {};
-
   if (progress.done) return renderDoneView(grp, loc, progress);
 
   const attempts = progress.attempts || 0;
@@ -493,43 +423,28 @@ function renderQuestion(grp, loc) {
   let content = `
     <div class="header">
       <h1>📍 ${LOKASI[L-1].toUpperCase()}</h1>
-      <div class="sub">Stop ${stop} dari 10
-        ${attempts > 0 ? `<span class="attempt-badge">Percobaan: ${attempts}</span>` : ''}
-      </div>
+      <div class="sub">Stop ${stop} dari 10 ${attempts > 0 ? `<span class="attempt-badge">Percobaan: ${attempts}</span>` : ''}</div>
     </div>
     <div class="card">
-      <div style="text-align:center;margin-bottom:12px;">
-        <div class="group-badge">KELOMPOK ${grp} · ${KODE[grp]}</div>
-      </div>
+      <div style="text-align:center;margin-bottom:12px;"><div class="group-badge">KELOMPOK ${grp} · ${KODE[grp]}</div></div>
       <div class="soal-box">
         <div class="label">📝 TUGAS PROGRAM</div>
         <div class="pertanyaan">${q.text}</div>
       </div>
       <div style="margin-top:10px;">
-        <label style="color:#94a3b8;font-size:0.85em;margin-bottom:6px;
-               display:block;">✍️ Tulis Kode C kamu:</label>
-        <textarea class="answer-input" id="answerInput"
-          placeholder="#include <stdio.h>&#10;int main() {&#10;  // tulis kodemu di sini&#10;  return 0;&#10;}"></textarea>
+        <label style="color:#94a3b8;font-size:0.85em;margin-bottom:6px;display:block;">✍️ Tulis Kode C kamu:</label>
+        <textarea class="answer-input" id="answerInput" placeholder="#include <stdio.h>&#10;int main() {&#10;  // tulis kodemu di sini&#10;  return 0;&#10;}"></textarea>
       </div>`;
 
-  if (showHint && !showFullAnswer) {
-    content += `<div class="hint-box">💡 <strong>Hint:</strong> <code>${q.hint}</code></div>`;
-  }
+  if (showHint && !showFullAnswer) { content += `<div class="hint-box">💡 <strong>Hint:</strong> <code>${q.hint}</code></div>`; }
   if (showFullAnswer) {
-    content += `<div class="hint-box" style="background:#7f1d1d;border-color:#dc2626;color:#fecaca;">
-      <strong>🔓 Contoh Jawaban (percobaan ke-${attempts}):</strong><br>
-      <code style="color:#fbbf24;">${q.hint}</code><br>
-      <small>Ketik ulang kode di atas untuk melanjutkan.</small>
-    </div>`;
+    content += `<div class="hint-box" style="background:#7f1d1d;border-color:#dc2626;color:#fecaca;"><strong>🔓 Contoh Jawaban (percobaan ke-${attempts}):</strong><br><code style="color:#fbbf24;">${q.hint}</code><br><small>Ketik ulang kode di atas untuk melanjutkan.</small></div>`;
   }
 
   content += `
-      <button class="btn" onclick="submitAnswer('${grp}', '${loc}')">
-        ✅ Kirim Kode
-      </button>
+      <button class="btn" onclick="submitAnswer('${grp}', '${loc}')">✅ Kirim Kode</button>
       <div id="feedback"></div>
-      <button class="btn btn-secondary" onclick="location.href='?'">
-        🏠 Dashboard</button>
+      <button class="btn btn-secondary" onclick="location.href='?'">🏠 Dashboard</button>
     </div>`;
 
   app.innerHTML = content;
@@ -541,24 +456,16 @@ function submitAnswer(grp, loc) {
   const q = QUESTIONS['L' + L][grp];
   const input = document.getElementById('answerInput').value;
   const feedback = document.getElementById('feedback');
-
   const progress = getProgress(grp)[loc] || {};
   const attempts = (progress.attempts || 0) + 1;
-
-  // VALIDASI KODE
   const check = validateCode(input, q);
 
   if (check.ok) {
-    saveProgress(grp, loc, {
-      done: true, answer: input.trim(), attempts: attempts, submittedAt: Date.now()
-    });
+    saveProgress(grp, loc, { done: true, answer: input.trim(), attempts: attempts, submittedAt: Date.now() });
     renderSuccess(grp, loc);
   } else {
     saveProgress(grp, loc, { attempts: attempts, lastWrong: input.trim() });
-    feedback.innerHTML = `<div class="error">
-      ❌ <strong>Kode Belum Tepat!</strong> (Percobaan ke-${attempts})<br>
-      ${check.msg}
-    </div>`;
+    feedback.innerHTML = `<div class="error">❌ <strong>Kode Belum Tepat!</strong> (Percobaan ke-${attempts})<br>${check.msg}</div>`;
     if (attempts >= 5) setTimeout(() => renderQuestion(grp, loc), 2000);
   }
 }
@@ -572,31 +479,14 @@ function renderSuccess(grp, loc) {
   let content = `
     <div class="header"><h1>🎉 BENAR!</h1></div>
     <div class="card">
-      <div class="success" style="font-size:1.1em;padding:20px;">
-        ✅ Kode kamu valid dan berhasil!<br>
-        <small style="font-weight:normal;opacity:0.9;">
-          Stop ${stop}/10 — ${LOKASI[L-1]}</small>
-      </div>`;
+      <div class="success" style="font-size:1.1em;padding:20px;">✅ Kode kamu valid dan berhasil!<br><small style="font-weight:normal;opacity:0.9;">Stop ${stop}/10 — ${LOKASI[L-1]}</small></div>`;
 
   if (isLast) {
-    content += `<div style="background:#4c1d95;padding:25px;border-radius:12px;
-      border:3px solid #8b5cf6;text-align:center;margin-top:15px;">
-      <div style="font-size:1.5em;font-weight:bold;color:#e9d5ff;">
-        🏆 SEMUA SELESAI! 🏆</div>
-      <div style="color:#c4b5fd;margin-top:10px;">
-        Kembali ke titik start & serahkan lembar jawaban!</div>
-    </div>`;
+    content += `<div style="background:#4c1d95;padding:25px;border-radius:12px;border:3px solid #8b5cf6;text-align:center;margin-top:15px;"><div style="font-size:1.5em;font-weight:bold;color:#e9d5ff;">🏆 SEMUA SELESAI! 🏆</div><div style="color:#c4b5fd;margin-top:10px;">Kembali ke titik start & serahkan lembar jawaban!</div></div>`;
   } else {
-    content += `<div class="clue-box" style="margin-top:15px;">
-      <div class="label">🗝️ CLUE BERIKUTNYA</div>
-      <div class="clue-text">${CLUE[parseInt(nextL.slice(1)) - 1]}</div>
-    </div>`;
+    content += `<div class="clue-box" style="margin-top:15px;"><div class="label">🗝️ CLUE BERIKUTNYA</div><div class="clue-text">${CLUE[parseInt(nextL.slice(1)) - 1]}</div></div>`;
   }
-
-  content += `
-    <button class="btn" onclick="location.href='?'" style="margin-top:15px;">
-      🏠 Kembali ke Dashboard</button>
-    </div>`;
+  content += `<button class="btn" onclick="location.href='?'" style="margin-top:15px;">🏠 Kembali ke Dashboard</button></div>`;
   app.innerHTML = content;
 }
 
@@ -609,35 +499,19 @@ function renderDoneView(grp, loc, progress) {
   let content = `
     <div class="header"><h1>✅ SUDAH SELESAI</h1></div>
     <div class="card">
-      <div class="success" style="margin-bottom:15px;">
-        Sudah dikerjakan di Stop ${stop}/10 — ${LOKASI[L-1]}
-      </div>
-      <div style="margin-top:10px;">
-        <div style="color:#94a3b8;font-size:0.85em;margin-bottom:5px;">
-          Kode yang kamu kirim:</div>
-        <div class="answer-preview">${progress.answer}</div>
-      </div>`;
+      <div class="success" style="margin-bottom:15px;">Sudah dikerjakan di Stop ${stop}/10 — ${LOKASI[L-1]}</div>
+      <div style="margin-top:10px;"><div style="color:#94a3b8;font-size:0.85em;margin-bottom:5px;">Kode yang kamu kirim:</div><div class="answer-preview">${progress.answer}</div></div>`;
 
   if (!isLast) {
-    content += `<div class="clue-box" style="margin-top:15px;">
-      <div class="label">🗝️ CLUE BERIKUTNYA</div>
-      <div class="clue-text">${CLUE[parseInt(nextL.slice(1)) - 1]}</div>
-    </div>`;
+    content += `<div class="clue-box" style="margin-top:15px;"><div class="label">🗝️ CLUE BERIKUTNYA</div><div class="clue-text">${CLUE[parseInt(nextL.slice(1)) - 1]}</div></div>`;
   } else {
-    content += `<div style="background:#4c1d95;padding:20px;border-radius:12px;
-      border:3px solid #8b5cf6;text-align:center;margin-top:15px;">
-      <div style="font-size:1.3em;font-weight:bold;color:#e9d5ff;">
-        🏆 KAMU SUDAH SELESAI! 🏆</div>
-    </div>`;
+    content += `<div style="background:#4c1d95;padding:20px;border-radius:12px;border:3px solid #8b5cf6;text-align:center;margin-top:15px;"><div style="font-size:1.3em;font-weight:bold;color:#e9d5ff;">🏆 KAMU SUDAH SELESAI! 🏆</div></div>`;
   }
-
-  content += `
-    <button class="btn btn-secondary" onclick="location.href='?'"
-      style="margin-top:15px;">🏠 Dashboard</button>
-    </div>`;
+  content += `<button class="btn btn-secondary" onclick="location.href='?'" style="margin-top:15px;">🏠 Dashboard</button></div>`;
   app.innerHTML = content;
 }
 
+// ==================== DASHBOARD BARU ====================
 function renderDashboard(grp) {
   const progress = getProgress(grp);
   const doneCount = Object.values(progress).filter(p => p.done).length;
@@ -652,21 +526,30 @@ function renderDashboard(grp) {
     const isDone = progress[locCode]?.done;
     const prevDone = i === 0 || progress[getLocForStop(grp, i)]?.done;
     const isCurrent = !isDone && prevDone;
-    const status = isDone ? 'done' : (isCurrent ? 'current' : '');
-    const icon = isDone ? '✅' : (isCurrent ? '🎯' : '⬜');
-    locList += `<div class="loc-item ${status}">
-      <span>${icon} Stop ${i+1} — ${LOKASI[L-1]}</span>
-      ${isCurrent ? '<span>←</span>' : ''}
-    </div>`;
+    
+    let statusClass, statusText, icon;
+    if (isDone) {
+      statusClass = 'done'; statusText = 'Selesai'; icon = '✅';
+    } else if (isCurrent) {
+      statusClass = 'current'; statusText = 'Kerjakan'; icon = '🎯';
+    } else {
+      statusClass = 'locked'; statusText = 'Terkunci'; icon = '🔒';
+    }
+
+    locList += `
+      <div class="loc-item ${statusClass}">
+        <div class="loc-name">
+          <span style="font-size:1.2em;">${icon}</span> Stop ${i+1} — ${LOKASI[L-1]}
+        </div>
+        <div class="status-badge">${statusText}</div>
+      </div>`;
   }
 
   let nextAction = '';
   if (doneCount === 0) {
-    nextAction = `<div style="background:#451a03;padding:14px;border-radius:8px;
-      border-left:4px solid #fbbf24;margin-bottom:15px;">
-      <div style="color:#fbbf24;font-weight:bold;margin-bottom:6px;">
-        🎯 MULAI DARI SINI</div>
-      <div style="color:#fed7aa;font-size:0.95em;">
+    nextAction = `<div style="background:#451a03;padding:15px;border-radius:10px;border-left:4px solid #fbbf24;margin-bottom:20px;">
+      <div style="color:#fbbf24;font-weight:bold;margin-bottom:8px;font-size:1.1em;">🎯 MULAI DARI SINI</div>
+      <div style="color:#fed7aa;font-size:0.95em;line-height:1.5;">
         Pergi ke <strong>${LOKASI[startIdx]}</strong><br>
         Cari QR Kelompok ${grp} (kode ${KODE[grp]}) lalu scan!</div>
     </div>`;
@@ -674,36 +557,43 @@ function renderDashboard(grp) {
     const nextStop = doneCount + 1;
     const nextLoc = getLocForStop(grp, nextStop);
     const nextLocIdx = parseInt(nextLoc.slice(1)) - 1;
-    nextAction = `<div style="background:#451a03;padding:14px;border-radius:8px;
-      border-left:4px solid #fbbf24;margin-bottom:15px;">
-      <div style="color:#fbbf24;font-weight:bold;margin-bottom:6px;">
-        ➡️ LANJUTKAN — STOP ${nextStop}/10</div>
-      <div style="color:#fed7aa;">
+    nextAction = `<div style="background:#451a03;padding:15px;border-radius:10px;border-left:4px solid #fbbf24;margin-bottom:20px;">
+      <div style="color:#fbbf24;font-weight:bold;margin-bottom:8px;font-size:1.1em;">➡️ LANJUTKAN — STOP ${nextStop}/10</div>
+      <div style="color:#fed7aa;line-height:1.5;">
         Cari QR Kelompok ${grp} di:<br>
         <strong>${CLUE[nextLocIdx]}</strong></div>
     </div>`;
   } else {
-    nextAction = `<div style="background:#4c1d95;padding:20px;border-radius:12px;
-      border:3px solid #8b5cf6;text-align:center;margin-bottom:15px;">
-      <div style="font-size:1.4em;font-weight:bold;color:#e9d5ff;">
-        🎉 SEMUA SELESAI! 🎉</div>
-      <div style="color:#c4b5fd;margin-top:6px;">
-        Serahkan lembar jawaban ke guru!</div>
+    nextAction = `<div style="background:#4c1d95;padding:20px;border-radius:12px;border:3px solid #8b5cf6;text-align:center;margin-bottom:20px;">
+      <div style="font-size:1.4em;font-weight:bold;color:#e9d5ff;">🎉 SEMUA SELESAI! 🎉</div>
+      <div style="color:#c4b5fd;margin-top:6px;">Serahkan lembar jawaban ke guru!</div>
     </div>`;
   }
 
   app.innerHTML = `
-    <div class="header"><h1>🏴‍☠️ TREASURE HUNT</h1>
-      <div class="sub">Kelompok ${grp} · ${KODE[grp]}</div></div>
+    <div class="header">
+      <h1>🏴‍☠️ TREASURE HUNT</h1>
+      <div class="sub">Kelompok ${grp} · ${KODE[grp]}</div>
+    </div>
     <div class="card">
       <h2>📊 Progress Kamu</h2>
-      <div class="progress-bar">
-        <div class="progress-fill" style="width:${percent}%">${doneCount}/10</div>
+      
+      <div class="progress-container">
+        <div class="progress-text">
+          <span>Status Perjalanan</span>
+          <span>${doneCount} / 10 Selesai (${percent}%)</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:${percent}%"></div>
+        </div>
       </div>
+
       ${nextAction}
-      ${locList}
-      <button class="btn btn-secondary" onclick="logout()"
-        style="margin-top:12px;">🚪 Logout</button>
+      <div class="loc-list">
+        ${locList}
+      </div>
+      
+      <button class="btn btn-secondary" onclick="logout()" style="margin-top:20px;">🚪 Logout</button>
     </div>`;
 }
 </script>
