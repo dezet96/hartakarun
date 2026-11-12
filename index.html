@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏴‍☠️ Treasure Hunt Coding</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #e2e8f0; min-height: 100vh; padding: 15px; }
+.container { max-width: 550px; margin: 0 auto; }
+.header { text-align: center; margin-bottom: 20px; }
+.header h1 { color: #fbbf24; font-size: 1.5em; }
+.header .sub { color: #94a3b8; font-size: 0.85em; margin-top: 4px; }
+.card { background: #1e293b; padding: 22px; border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3); margin-bottom: 15px; }
+.card h2 { color: #fbbf24; margin-bottom: 12px; font-size: 1.15em; }
+.card p { color: #cbd5e1; line-height: 1.6; margin-bottom: 10px; }
+
+.login-input { width: 100%; padding: 16px; font-size: 1.3em;
+  text-align: center; letter-spacing: 8px; text-transform: uppercase;
+  background: #0f172a; color: #fbbf24; border: 3px solid #334155;
+  border-radius: 12px; font-family: monospace; font-weight: bold; }
+.login-input:focus { outline: none; border-color: #fbbf24; }
+
+.answer-input { width: 100%; padding: 14px; font-size: 1em;
+  background: #0f172a; color: #e2e8f0; border: 2px solid #334155;
+  border-radius: 10px; font-family: monospace; line-height: 1.5;
+  resize: vertical; min-height: 80px; }
+.answer-input:focus { outline: none; border-color: #0ea5e9; }
+.answer-input::placeholder { color: #64748b; }
+
+.btn { width: 100%; padding: 15px; font-size: 1em;
+  background: #fbbf24; color: #1e293b; border: none;
+  border-radius: 12px; cursor: pointer; font-weight: bold;
+  margin-top: 12px; }
+.btn:hover { background: #f59e0b; }
+.btn-secondary { background: transparent; color: #94a3b8;
+  border: 2px solid #334155; font-size: 0.85em; padding: 10px; }
+.btn-secondary:hover { background: #334155; color: #e2e8f0; }
+
+.error { background: #7f1d1d; border-left: 4px solid #dc2626;
+  padding: 12px 15px; border-radius: 8px; margin-top: 12px;
+  color: #fecaca; font-size: 0.9em; }
+.success { background: #14532d; border-left: 4px solid #16a34a;
+  padding: 15px; border-radius: 8px; margin-top: 12px;
+  color: #bbf7d0; text-align: center; font-weight: bold; }
+.hint-box { background: #451a03; border-left: 4px solid #fbbf24;
+  padding: 12px 15px; border-radius: 8px; margin-top: 12px;
+  color: #fed7aa; font-size: 0.88em; }
+
+.soal-box { background: #0c4a6e; padding: 18px; border-radius: 10px;
+  border-left: 4px solid #0ea5e9; margin-bottom: 15px; }
+.soal-box .label { color: #7dd3fc; font-size: 0.8em;
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.soal-box .pertanyaan { font-size: 1.05em; line-height: 1.6;
+  color: #f1f5f9; white-space: pre-wrap; }
+
+.clue-box { background: #78350f; padding: 18px; border-radius: 10px;
+  border-left: 4px solid #f59e0b; margin-top: 12px; }
+.clue-box .label { color: #fbbf24; font-size: 0.8em;
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.clue-box .clue-text { font-size: 1.05em; font-style: italic;
+  color: #fed7aa; line-height: 1.5; }
+
+.group-badge { background: #be185d; color: white; padding: 8px 20px;
+  border-radius: 25px; font-weight: bold; display: inline-block;
+  margin-bottom: 12px; font-size: 1em; }
+
+.progress-bar { background: #334155; height: 22px; border-radius: 12px;
+  overflow: hidden; margin: 12px 0; }
+.progress-fill { background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  height: 100%; transition: width 0.5s; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 0.75em; font-weight: bold; color: #1e293b; }
+
+.loc-item { background: #0f172a; padding: 10px 14px; border-radius: 8px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-left: 3px solid #475569; margin-bottom: 6px; font-size: 0.9em; }
+.loc-item.done { border-left-color: #16a34a; background: #052e16; }
+.loc-item.current { border-left-color: #fbbf24; background: #451a03;
+  animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.75; } }
+
+.attempt-badge { background: #475569; color: #cbd5e1;
+  padding: 4px 10px; border-radius: 12px; font-size: 0.75em;
+  display: inline-block; margin-left: 8px; }
+
+.answer-preview { background: #0f172a; padding: 12px; border-radius: 8px;
+  font-family: monospace; color: #4ade80; white-space: pre-wrap;
+  font-size: 0.9em; margin-top: 8px; border: 1px solid #16a34a; }
+</style>
+</head>
+<body>
+<div class="container" id="app"></div>
+
+<script>
+// ========== DATA ==========
+const LOKASI = ['Perpustakaan','Kantin','Lab Komputer','Ruang Guru','Aula',
+                'Musholla','Pos Satpam','Parkiran','Tata Usaha','Koperasi'];
+const CLUE = [
+  'Tempat sunyi penuh rak buku',
+  'Cari bau gorengan saat istirahat',
+  'Ruangan ber-AC dengan banyak layar',
+  'Tempat para guru beristirahat',
+  'Ruangan besar untuk upacara',
+  'Tempat ibadah di sekolah',
+  'Pos penjaga di dekat gerbang',
+  'Deretan kendaraan diparkir rapi',
+  'Tempat urus surat dan administrasi',
+  'Toko kecil penjual alat tulis'
+];
+const KODE = { A:'A7X9', B:'B2K4', C:'C5M8', D:'D3P6', E:'E8N1',
+               F:'F4R7', G:'G6T2', H:'H9W5', I:'I1Y3', J:'J7Z8' };
+
+// SOAL + KUNCI JAWABAN (100 butir)
+const QUESTIONS = {
+  L1: {
+    A:{text:"Cetak 1 2 3 4 5 pakai FOR", answer:"1 2 3 4 5", hint:"5 angka, dipisah spasi"},
+    B:{text:"Cetak 2 4 6 8 10 pakai FOR", answer:"2 4 6 8 10", hint:"Bilangan genap, dipisah spasi"},
+    C:{text:"Cetak 1 3 5 7 9 pakai FOR", answer:"1 3 5 7 9", hint:"Bilangan ganjil, dipisah spasi"},
+    D:{text:"Cetak 5 4 3 2 1 pakai FOR (mundur)", answer:"5 4 3 2 1", hint:"Dari besar ke kecil"},
+    E:{text:"Cetak 3 6 9 12 15 pakai FOR", answer:"3 6 9 12 15", hint:"Kelipatan 3"},
+    F:{text:"Cetak 10 8 6 4 2 pakai FOR (mundur)", answer:"10 8 6 4 2", hint:"Genap mundur"},
+    G:{text:"Cetak 1 2 3 4 5 6 pakai FOR", answer:"1 2 3 4 5 6", hint:"1 sampai 6"},
+    H:{text:"Cetak 2 4 6 8 pakai FOR", answer:"2 4 6 8", hint:"Genap dari 2"},
+    I:{text:"Cetak 1 3 5 7 9 11 pakai FOR", answer:"1 3 5 7 9 11", hint:"Ganjil sampai 11"},
+    J:{text:"Cetak 1 sampai 10 pakai FOR", answer:"1 2 3 4 5 6 7 8 9 10", hint:"Semua angka 1-10, spasi"}
+  },
+  L2: {
+    A:{text:"Hitung 1+2+3+4+5 pakai FOR. Cetak: 'Jumlah = [hasil]'", answer:"Jumlah = 15", hint:"Format: 'Jumlah = X'"},
+    B:{text:"Hitung 1..7 pakai FOR. Cetak: 'Jumlah = [hasil]'", answer:"Jumlah = 28", hint:"1+2+...+7"},
+    C:{text:"Hitung 1..10 pakai FOR. Cetak: 'Jumlah = [hasil]'", answer:"Jumlah = 55", hint:"1+2+...+10"},
+    D:{text:"Hitung 1+2+3 pakai FOR. Cetak: 'Jumlah = [hasil]'", answer:"Jumlah = 6", hint:"1+2+3"},
+    E:{text:"Hitung 1..6 pakai FOR. Cetak: 'Jumlah = [hasil]'", answer:"Jumlah = 21", hint:"1+2+...+6"},
+    F:{text:"Hitung 1..8 pakai FOR. Cetak: 'Jumlah = [hasil]'", answer:"Jumlah = 36", hint:"1+2+...+8"},
+    G:{text:"Hitung 1..9 pakai FOR. Cetak: 'Jumlah = [hasil]'", answer:"Jumlah = 45", hint:"1+2+...+9"},
+    H:{text:"Hitung 1+2+3+4 pakai FOR. Cetak: 'Jumlah = [hasil]'", answer:"Jumlah = 10", hint:"1+2+3+4"},
+    I:{text:"Hitung 1..12 pakai FOR. Cetak: 'Jumlah = [hasil]'", answer:"Jumlah = 78", hint:"1+2+...+12"},
+    J:{text:"Hitung 1..15 pakai FOR. Cetak: 'Jumlah = [hasil]'", answer:"Jumlah = 120", hint:"1+2+...+15"}
+  },
+  L3: {
+    A:{text:"Tabel perkalian 3 dari 1 sampai 5. Format: '3 x 1 = 3' dst", answer:"3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15", hint:"5 baris, format '3 x N = hasil'"},
+    B:{text:"Tabel perkalian 4 dari 1 sampai 5", answer:"4 x 1 = 4\n4 x 2 = 8\n4 x 3 = 12\n4 x 4 = 16\n4 x 5 = 20", hint:"5 baris"},
+    C:{text:"Tabel perkalian 5 dari 1 sampai 5", answer:"5 x 1 = 5\n5 x 2 = 10\n5 x 3 = 15\n5 x 4 = 20\n5 x 5 = 25", hint:"5 baris"},
+    D:{text:"Tabel perkalian 6 dari 1 sampai 5", answer:"6 x 1 = 6\n6 x 2 = 12\n6 x 3 = 18\n6 x 4 = 24\n6 x 5 = 30", hint:"5 baris"},
+    E:{text:"Tabel perkalian 7 dari 1 sampai 5", answer:"7 x 1 = 7\n7 x 2 = 14\n7 x 3 = 21\n7 x 4 = 28\n7 x 5 = 35", hint:"5 baris"},
+    F:{text:"Tabel perkalian 8 dari 1 sampai 5", answer:"8 x 1 = 8\n8 x 2 = 16\n8 x 3 = 24\n8 x 4 = 32\n8 x 5 = 40", hint:"5 baris"},
+    G:{text:"Tabel perkalian 9 dari 1 sampai 5", answer:"9 x 1 = 9\n9 x 2 = 18\n9 x 3 = 27\n9 x 4 = 36\n9 x 5 = 45", hint:"5 baris"},
+    H:{text:"Tabel perkalian 2 dari 1 sampai 5", answer:"2 x 1 = 2\n2 x 2 = 4\n2 x 3 = 6\n2 x 4 = 8\n2 x 5 = 10", hint:"5 baris"},
+    I:{text:"Tabel perkalian 10 dari 1 sampai 5", answer:"10 x 1 = 10\n10 x 2 = 20\n10 x 3 = 30\n10 x 4 = 40\n10 x 5 = 50", hint:"5 baris"},
+    J:{text:"Tabel perkalian 11 dari 1 sampai 5", answer:"11 x 1 = 11\n11 x 2 = 22\n11 x 3 = 33\n11 x 4 = 44\n11 x 5 = 55", hint:"5 baris"}
+  },
+  L4: {
+    A:{text:"Cetak 1 sampai 5 pakai WHILE", answer:"1 2 3 4 5", hint:"Angka 1-5 dipisah spasi"},
+    B:{text:"Cetak 1 sampai 7 pakai WHILE", answer:"1 2 3 4 5 6 7", hint:"Angka 1-7 dipisah spasi"},
+    C:{text:"Cetak 1 sampai 10 pakai WHILE", answer:"1 2 3 4 5 6 7 8 9 10", hint:"Angka 1-10 dipisah spasi"},
+    D:{text:"Cetak 1 sampai 8 pakai WHILE", answer:"1 2 3 4 5 6 7 8", hint:"Angka 1-8 dipisah spasi"},
+    E:{text:"Cetak 1 sampai 6 pakai WHILE", answer:"1 2 3 4 5 6", hint:"Angka 1-6 dipisah spasi"},
+    F:{text:"Cetak 1 sampai 9 pakai WHILE", answer:"1 2 3 4 5 6 7 8 9", hint:"Angka 1-9 dipisah spasi"},
+    G:{text:"Cetak 1 sampai 4 pakai WHILE", answer:"1 2 3 4", hint:"Angka 1-4 dipisah spasi"},
+    H:{text:"Cetak 1 sampai 12 pakai WHILE", answer:"1 2 3 4 5 6 7 8 9 10 11 12", hint:"Angka 1-12"},
+    I:{text:"Cetak 1 sampai 3 pakai WHILE", answer:"1 2 3", hint:"Angka 1-3"},
+    J:{text:"Cetak 1 sampai 15 pakai WHILE", answer:"1 2 3 4 5 6 7 8 9 10 11 12 13 14 15", hint:"Angka 1-15"}
+  },
+  L5: {
+    A:{text:"Countdown dari 5 → cetak 5 4 3 2 1 lalu 'Go!'", answer:"5 4 3 2 1 Go!", hint:"Angka mundur + Go!"},
+    B:{text:"Countdown dari 7 → cetak angka lalu 'Go!'", answer:"7 6 5 4 3 2 1 Go!", hint:"Mundur dari 7"},
+    C:{text:"Countdown dari 10 → cetak angka lalu 'Go!'", answer:"10 9 8 7 6 5 4 3 2 1 Go!", hint:"Mundur dari 10"},
+    D:{text:"Countdown dari 8 → cetak angka lalu 'Go!'", answer:"8 7 6 5 4 3 2 1 Go!", hint:"Mundur dari 8"},
+    E:{text:"Countdown dari 6 → cetak angka lalu 'Go!'", answer:"6 5 4 3 2 1 Go!", hint:"Mundur dari 6"},
+    F:{text:"Countdown dari 9 → cetak angka lalu 'Go!'", answer:"9 8 7 6 5 4 3 2 1 Go!", hint:"Mundur dari 9"},
+    G:{text:"Countdown dari 4 → cetak angka lalu 'Go!'", answer:"4 3 2 1 Go!", hint:"Mundur dari 4"},
+    H:{text:"Countdown dari 12 → cetak angka lalu 'Go!'", answer:"12 11 10 9 8 7 6 5 4 3 2 1 Go!", hint:"Mundur dari 12"},
+    I:{text:"Countdown dari 3 → cetak angka lalu 'Go!'", answer:"3 2 1 Go!", hint:"Mundur dari 3"},
+    J:{text:"Countdown dari 15 → cetak angka lalu 'Go!'", answer:"15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 Go!", hint:"Mundur dari 15"}
+  },
+  L6: {
+    A:{text:"Cetak bilangan genap 2 sampai 10 (WHILE)", answer:"2 4 6 8 10", hint:"Genap, dipisah spasi"},
+    B:{text:"Cetak bilangan genap 2 sampai 20 (WHILE)", answer:"2 4 6 8 10 12 14 16 18 20", hint:"Genap 2-20"},
+    C:{text:"Cetak bilangan genap 2 sampai 30 (WHILE)", answer:"2 4 6 8 10 12 14 16 18 20 22 24 26 28 30", hint:"Genap 2-30"},
+    D:{text:"Cetak bilangan genap 2 sampai 24 (WHILE)", answer:"2 4 6 8 10 12 14 16 18 20 22 24", hint:"Genap 2-24"},
+    E:{text:"Cetak bilangan genap 2 sampai 14 (WHILE)", answer:"2 4 6 8 10 12 14", hint:"Genap 2-14"},
+    F:{text:"Cetak bilangan genap 2 sampai 40 (WHILE)", answer:"2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40", hint:"Genap 2-40"},
+    G:{text:"Cetak bilangan genap 2 sampai 8 (WHILE)", answer:"2 4 6 8", hint:"Genap 2-8"},
+    H:{text:"Cetak bilangan genap 2 sampai 18 (WHILE)", answer:"2 4 6 8 10 12 14 16 18", hint:"Genap 2-18"},
+    I:{text:"Cetak bilangan genap 2 sampai 12 (WHILE)", answer:"2 4 6 8 10 12", hint:"Genap 2-12"},
+    J:{text:"Cetak bilangan genap 2 sampai 50 (WHILE)", answer:"2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40 42 44 46 48 50", hint:"Genap 2-50"}
+  },
+  L7: {
+    A:{text:"DO-WHILE minta PIN sampai 1111. Jika benar cetak 'Selamat datang Admin!'", answer:"Selamat datang Admin!", hint:"Output akhir saat PIN benar"},
+    B:{text:"DO-WHILE minta PIN sampai 2222. Jika benar cetak 'Akses diterima!'", answer:"Akses diterima!", hint:"Output akhir saat PIN benar"},
+    C:{text:"DO-WHILE minta PIN sampai 1234. Jika benar cetak 'Login sukses!'", answer:"Login sukses!", hint:"Output akhir saat PIN benar"},
+    D:{text:"DO-WHILE minta PIN sampai 9999. Jika benar cetak 'Verifikasi OK!'", answer:"Verifikasi OK!", hint:"Output akhir saat PIN benar"},
+    E:{text:"DO-WHILE minta PIN sampai 5555. Jika benar cetak 'Halo User!'", answer:"Halo User!", hint:"Output akhir saat PIN benar"},
+    F:{text:"DO-WHILE minta PIN sampai 7777. Jika benar cetak 'Selamat datang!'", answer:"Selamat datang!", hint:"Output akhir saat PIN benar"},
+    G:{text:"DO-WHILE minta PIN sampai 4444. Jika benar cetak 'PIN benar!'", answer:"PIN benar!", hint:"Output akhir saat PIN benar"},
+    H:{text:"DO-WHILE minta PIN sampai 4321. Jika benar cetak 'Akses granted!'", answer:"Akses granted!", hint:"Output akhir saat PIN benar"},
+    I:{text:"DO-WHILE minta PIN sampai 8765. Jika benar cetak 'Berhasil masuk!'", answer:"Berhasil masuk!", hint:"Output akhir saat PIN benar"},
+    J:{text:"DO-WHILE minta PIN sampai 3333. Jika benar cetak 'Login berhasil!'", answer:"Login berhasil!", hint:"Output akhir saat PIN benar"}
+  },
+  L8: {
+    A:{text:"Menu DO-WHILE: 1.Sapa (cetak 'Halo!'), 2.Keluar. Output jika user pilih 1?", answer:"Halo!", hint:"Output saat pilih Sapa"},
+    B:{text:"Menu DO-WHILE: 1.Info (cetak 'Sekolah ABC'), 2.Keluar. Output jika pilih 1?", answer:"Sekolah ABC", hint:"Output saat pilih Info"},
+    C:{text:"Menu DO-WHILE: 1.Hitung (cetak 'Menghitung...'), 2.Keluar. Output jika pilih 1?", answer:"Menghitung...", hint:"Output saat pilih Hitung"},
+    D:{text:"Menu DO-WHILE: 1.Tambah (cetak 'Menambah'), 2.Kurang (cetak 'Mengurangi'), 3.Keluar. Output jika pilih 1?", answer:"Menambah", hint:"Output saat pilih Tambah"},
+    E:{text:"Menu DO-WHILE: 1.Info (cetak 'Info sekolah'), 2.Keluar. Output jika pilih 1?", answer:"Info sekolah", hint:"Output saat pilih Info"},
+    F:{text:"Menu DO-WHILE: 1.Sapa (cetak 'Hai!'), 2.Hitung (cetak 'Hitung'), 3.Keluar. Output jika pilih 1?", answer:"Hai!", hint:"Output saat pilih Sapa"},
+    G:{text:"Menu DO-WHILE: 1.Sapa (cetak 'Halo teman!'), 2.Info, 3.Hitung, 4.Keluar. Output jika pilih 1?", answer:"Halo teman!", hint:"Output saat pilih Sapa"},
+    H:{text:"Menu DO-WHILE: 1.Tambah (cetak 'Penjumlahan'), 2.Kurang, 3.Kali, 4.Keluar. Output jika pilih 1?", answer:"Penjumlahan", hint:"Output saat pilih Tambah"},
+    I:{text:"Menu DO-WHILE: 1.Tambah (cetak 'Plus'), 2.Kali (cetak 'Kali'), 3.Keluar. Output jika pilih 1?", answer:"Plus", hint:"Output saat pilih Tambah"},
+    J:{text:"Menu DO-WHILE: 1.Sapa (cetak 'Hai semua!'), 2.Hitung, 3.Info, 4.Keluar. Output jika pilih 1?", answer:"Hai semua!", hint:"Output saat pilih Sapa"}
+  },
+  L9: {
+    A:{text:"Pola bintang 3 baris (FOR nested). Baris 1=*, baris 2=**, baris 3=***", answer:"*\n**\n***", hint:"Tiap baris: baris ke-N ada N bintang"},
+    B:{text:"Pola bintang 4 baris (FOR nested)", answer:"*\n**\n***\n****", hint:"Tinggi 4 baris"},
+    C:{text:"Pola bintang 5 baris (FOR nested)", answer:"*\n**\n***\n****\n*****", hint:"Tinggi 5 baris"},
+    D:{text:"Pola bintang 6 baris (FOR nested)", answer:"*\n**\n***\n****\n*****\n******", hint:"Tinggi 6 baris"},
+    E:{text:"Pola bintang 2 baris (FOR nested)", answer:"*\n**", hint:"Tinggi 2 baris"},
+    F:{text:"Pola bintang 7 baris (FOR nested)", answer:"*\n**\n***\n****\n*****\n******\n*******", hint:"Tinggi 7 baris"},
+    G:{text:"Pola bintang 8 baris (FOR nested)", answer:"*\n**\n***\n****\n*****\n******\n*******\n********", hint:"Tinggi 8 baris"},
+    H:{text:"Pola bintang 9 baris (FOR nested)", answer:"*\n**\n***\n****\n*****\n******\n*******\n********\n*********", hint:"Tinggi 9 baris"},
+    I:{text:"Pola bintang 10 baris (FOR nested)", answer:"*\n**\n***\n****\n*****\n******\n*******\n********\n*********\n**********", hint:"Tinggi 10 baris"},
+    J:{text:"Pola bintang 5 baris TERBALIK (FOR nested)", answer:"*****\n****\n***\n**\n*", hint:"Baris 1=5 bintang, menurun"}
+  },
+  L10: {
+    A:{text:"Hitung 3! pakai FOR. Cetak: 'Hasil = [x]'", answer:"Hasil = 6", hint:"3! = 3×2×1 = 6"},
+    B:{text:"Hitung 4! pakai FOR. Cetak: 'Hasil = [x]'", answer:"Hasil = 24", hint:"4! = 24"},
+    C:{text:"Hitung 5! pakai FOR. Cetak: 'Hasil = [x]'", answer:"Hasil = 120", hint:"5! = 120"},
+    D:{text:"Hitung 6! pakai FOR. Cetak: 'Hasil = [x]'", answer:"Hasil = 720", hint:"6! = 720"},
+    E:{text:"Hitung 2! pakai FOR. Cetak: 'Hasil = [x]'", answer:"Hasil = 2", hint:"2! = 2"},
+    F:{text:"Hitung 7! pakai FOR. Cetak: 'Hasil = [x]'", answer:"Hasil = 5040", hint:"7! = 5040"},
+    G:{text:"Hitung 8! pakai FOR. Cetak: 'Hasil = [x]'", answer:"Hasil = 40320", hint:"8! = 40320"},
+    H:{text:"Hitung 3! pakai WHILE. Cetak: 'Hasil = [x]'", answer:"Hasil = 6", hint:"3! = 6"},
+    I:{text:"Hitung 5! pakai WHILE. Cetak: 'Hasil = [x]'", answer:"Hasil = 120", hint:"5! = 120"},
+    J:{text:"Hitung 6! pakai DO-WHILE. Cetak: 'Hasil = [x]'", answer:"Hasil = 720", hint:"6! = 720"}
+  }
+};
+
+// START & ROUTING HELPERS
+const START_LOC = {};
+['A','B','C','D','E','F','G','H','I','J'].forEach((g,i) => {
+  START_LOC[g] = 'L' + (i + 1);
+});
+
+function getStopNum(grp, loc) {
+  const L = parseInt(loc.slice(1));
+  const g = grp.charCodeAt(0) - 65;
+  return ((L - 1 - g + 10) % 10) + 1;
+}
+function getLocForStop(grp, stopNum) {
+  const g = grp.charCodeAt(0) - 65;
+  const L = ((g + stopNum - 1) % 10) + 1;
+  return 'L' + L;
+}
+function getNextLoc(loc) {
+  const L = parseInt(loc.slice(1));
+  return 'L' + (L % 10 + 1);
+}
+
+// ============ SESSION (dengan fallback memory) ============
+function getSession() {
+  try {
+    const s = localStorage.getItem('hunt_session');
+    if (s) return JSON.parse(s);
+  } catch (e) { console.warn('localStorage read gagal:', e); }
+  return window._memSession || null;
+}
+
+function setSession(grp) {
+  const data = { group: grp, loginTime: Date.now() };
+  window._memSession = data;
+  try {
+    localStorage.setItem('hunt_session', JSON.stringify(data));
+  } catch (e) { console.warn('localStorage write gagal, pakai memory:', e); }
+}
+
+function clearSession() {
+  window._memSession = null;
+  window._memProgress = {};
+  try {
+    localStorage.removeItem('hunt_session');
+    localStorage.removeItem('hunt_progress');
+  } catch (e) {}
+}
+
+function logout() {
+  if (confirm('Logout? Progress akan hilang.')) {
+    clearSession();
+    renderLogin('', '');
+  }
+}
+
+// ============ PROGRESS (dengan fallback memory) ============
+function getProgress(grp) {
+  let fromStorage = {};
+  try {
+    const all = JSON.parse(localStorage.getItem('hunt_progress') || '{}');
+    fromStorage = all[grp] || {};
+  } catch (e) {}
+  const fromMem = (window._memProgress || {})[grp] || {};
+  return { ...fromStorage, ...fromMem };
+}
+
+function saveProgress(grp, loc, data) {
+  if (!window._memProgress) window._memProgress = {};
+  if (!window._memProgress[grp]) window._memProgress[grp] = {};
+  window._memProgress[grp][loc] = {
+    ...(window._memProgress[grp][loc] || {}), ...data, updatedAt: Date.now()
+  };
+  try {
+    const all = JSON.parse(localStorage.getItem('hunt_progress') || '{}');
+    if (!all[grp]) all[grp] = {};
+    all[grp][loc] = { ...(all[grp][loc] || {}), ...data, updatedAt: Date.now() };
+    localStorage.setItem('hunt_progress', JSON.stringify(all));
+  } catch (e) { console.warn('localStorage save gagal, hanya di memory:', e); }
+}
+
+function isStopDone(grp, loc) {
+  return getProgress(grp)[loc]?.done === true;
+}
+
+function isStopUnlocked(grp, loc) {
+  const stop = getStopNum(grp, loc);
+  if (stop === 1) return true;
+  const prevLoc = getLocForStop(grp, stop - 1);
+  return isStopDone(grp, prevLoc);
+}
+
+// ============ VALIDATION ============
+function normalize(s) {
+  return String(s).trim().toLowerCase()
+    .replace(/\s+/g, ' ')
+    .replace(/[.,;:'"]/g, '')
+    .trim();
+}
+
+function checkAnswer(input, expected) {
+  if (!input || !input.trim()) return false;
+  if (expected.includes('\n')) {
+    const inL = input.trim().split('\n').map(normalize).filter(l => l);
+    const expL = expected.trim().split('\n').map(normalize);
+    if (inL.length !== expL.length) return false;
+    return inL.every((l, i) => l === expL[i]);
+  }
+  return normalize(input) === normalize(expected);
+}
+
+// ============ ROUTER ============
+const app = document.getElementById('app');
+const params = new URLSearchParams(location.search);
+const urlLoc = (params.get('loc') || '').toUpperCase();
+const urlGrp = (params.get('grp') || '').toUpperCase();
+const session = getSession();
+
+if (!session) {
+  renderLogin(urlLoc, urlGrp);
+} else {
+  renderAfterLogin(session.group);
+}
+
+// DEBUG mode: buka ?debug=1
+if (params.get('debug') === '1') {
+  setTimeout(() => {
+    console.log('=== DEBUG ===');
+    console.log('Session:', getSession());
+    console.log('urlLoc:', urlLoc, '| urlGrp:', urlGrp);
+    try {
+      localStorage.setItem('_test', '1');
+      localStorage.removeItem('_test');
+      console.log('✅ localStorage: BERFUNGSI');
+    } catch (e) {
+      console.log('❌ localStorage: DIBLOKIR —', e.message);
+      console.log('👉 Solusi: upload ke https:// (GitHub Pages)');
+    }
+  }, 200);
+}
+
+// ==================== RENDERERS ====================
+
+function renderLogin(pendingLoc, pendingGrp) {
+  let pending = '';
+  if (pendingLoc && pendingGrp) {
+    pending = `<div style="background:#0c4a6e;padding:10px;border-radius:8px;
+      margin-bottom:12px;border-left:3px solid #0ea5e9;color:#7dd3fc;
+      font-size:0.85em;">📍 QR untuk Kelompok <strong>${pendingGrp}</strong>
+      terdeteksi. Login dulu.</div>`;
+  }
+  app.innerHTML = `
+    <div class="header"><h1>🏴‍☠️ TREASURE HUNT</h1>
+      <div class="sub">Belajar Perulangan Bahasa C</div></div>
+    <div class="card">
+      <h2>🔑 Login Kelompok</h2>
+      ${pending}
+      <p style="font-size:0.9em;color:#94a3b8;">
+        Masukkan kode verifikasi dari kartu kelompokmu.</p>
+      <input type="text" class="login-input" id="pwdInput"
+             placeholder="A7X9" maxlength="8" autocomplete="off">
+      <button class="btn" onclick="handleLogin()">🔓 Masuk</button>
+      <div id="loginError"></div>
+    </div>`;
+  const inp = document.getElementById('pwdInput');
+  inp.focus();
+  inp.addEventListener('keypress', e => { if (e.key === 'Enter') handleLogin(); });
+}
+
+function handleLogin() {
+  const rawVal = document.getElementById('pwdInput').value || '';
+  const input = rawVal.replace(/\s+/g, '').toUpperCase();
+  const errEl = document.getElementById('loginError');
+
+  if (!input) {
+    errEl.innerHTML = '<div class="error">❌ Masukkan kode dulu!</div>';
+    return;
+  }
+
+  let grp = null;
+  for (const k in KODE) {
+    if (KODE[k] === input) { grp = k; break; }
+  }
+
+  if (!grp) {
+    errEl.innerHTML = `<div class="error">
+      ❌ Kode "<strong>${input}</strong>" tidak dikenali!<br>
+      <small style="opacity:0.85;">Kode valid: A7X9, B2K4, C5M8, D3P6, E8N1,
+      F4R7, G6T2, H9W5, I1Y3, J7Z8</small><br>
+      Periksa kembali kartu kelompokmu.</div>`;
+    document.getElementById('pwdInput').value = '';
+    document.getElementById('pwdInput').focus();
+    return;
+  }
+
+  if (urlGrp && urlGrp !== grp) {
+    errEl.innerHTML = `<div class="error">
+      ❌ QR ini untuk Kelompok <strong>${urlGrp}</strong>,
+      tapi kamu memasukkan kode untuk Kelompok <strong>${grp}</strong>.<br><br>
+      Cari QR dengan kode <strong>${KODE[grp]}</strong> di sekitarmu.</div>`;
+    return;
+  }
+
+  setSession(grp);
+  renderAfterLogin(grp);
+}
+
+function renderAfterLogin(grp) {
+  if (urlLoc && urlGrp) {
+    if (urlGrp !== grp) {
+      renderWrongQR(grp, urlGrp, urlLoc);
+    } else if (!isStopUnlocked(grp, urlLoc)) {
+      renderLocked(grp, urlLoc);
+    } else {
+      renderQuestion(grp, urlLoc);
+    }
+  } else {
+    renderDashboard(grp);
+  }
+}
+
+function renderWrongQR(myGrp, qrGrp, loc) {
+  app.innerHTML = `
+    <div class="header"><h1>⚠️ SALAH QR!</h1></div>
+    <div class="card" style="border: 3px solid #dc2626;">
+      <div style="text-align:center;margin-bottom:15px;">
+        <div class="group-badge">KAMU: KELOMPOK ${myGrp} (${KODE[myGrp]})</div>
+      </div>
+      <div class="error" style="font-size:0.95em;padding:18px;">
+        <strong>❌ QR ini BUKAN untukmu!</strong><br><br>
+        QR milik: <strong>Kelompok ${qrGrp} (${KODE[qrGrp]})</strong><br>
+        Kamu Kelompok <strong>${myGrp}</strong>.<br><br>
+        Cari QR dengan kode
+        <strong style="color:#fbbf24;font-size:1.15em;">${KODE[myGrp]}</strong>
+        di lokasi ini.
+      </div>
+      <button class="btn btn-secondary" onclick="location.href='?'">🏠 Dashboard</button>
+    </div>`;
+}
+
+function renderLocked(grp, loc) {
+  const stop = getStopNum(grp, loc);
+  const prevLoc = getLocForStop(grp, stop - 1);
+  const prevIdx = parseInt(prevLoc.slice(1)) - 1;
+  app.innerHTML = `
+    <div class="header"><h1>🔒 BELUM BISA DIBUKA</h1></div>
+    <div class="card" style="border: 3px solid #f59e0b;">
+      <div class="error" style="background:#451a03;border-left-color:#fbbf24;
+           color:#fed7aa;">
+        <strong>⚠️ Kamu belum menyelesaikan stop sebelumnya!</strong><br><br>
+        Ini adalah <strong>Stop ${stop}</strong>.<br>
+        Selesaikan dulu <strong>Stop ${stop - 1}</strong> di
+        <strong>${LOKASI[prevIdx]}</strong>.
+      </div>
+      <button class="btn btn-secondary" onclick="location.href='?'">🏠 Dashboard</button>
+    </div>`;
+}
+
+function renderQuestion(grp, loc) {
+  const L = parseInt(loc.slice(1));
+  const stop = getStopNum(grp, loc);
+  const q = QUESTIONS['L' + L][grp];
+  const progress = getProgress(grp)[loc] || {};
+
+  if (progress.done) {
+    return renderDoneView(grp, loc, progress);
+  }
+
+  const attempts = progress.attempts || 0;
+  const showHint = attempts >= 2;
+  const showFullAnswer = attempts >= 5;
+
+  let content = `
+    <div class="header">
+      <h1>📍 ${LOKASI[L-1].toUpperCase()}</h1>
+      <div class="sub">Stop ${stop} dari 10
+        ${attempts > 0 ? `<span class="attempt-badge">Percobaan: ${attempts}</span>` : ''}
+      </div>
+    </div>
+    <div class="card">
+      <div style="text-align:center;margin-bottom:12px;">
+        <div class="group-badge">KELOMPOK ${grp} · ${KODE[grp]}</div>
+      </div>
+      <div class="soal-box">
+        <div class="label">📝 SOAL</div>
+        <div class="pertanyaan">${q.text}</div>
+      </div>
+      <div style="margin-top:10px;">
+        <label style="color:#94a3b8;font-size:0.85em;margin-bottom:6px;
+               display:block;">✍️ Tulis jawaban (output program):</label>
+        <textarea class="answer-input" id="answerInput"
+          placeholder="Ketik jawaban di sini..."></textarea>
+      </div>`;
+
+  if (showHint && !showFullAnswer) {
+    content += `<div class="hint-box">💡 <strong>Hint:</strong> ${q.hint}</div>`;
+  }
+  if (showFullAnswer) {
+    const ansShow = q.answer.replace(/\n/g, ' ⏎ ');
+    content += `<div class="hint-box" style="background:#7f1d1d;border-color:#dc2626;color:#fecaca;">
+      <strong>🔓 Jawaban dibuka (percobaan ke-${attempts}):</strong><br>
+      <code style="color:#fbbf24;">${ansShow}</code><br>
+      <small>Ketik ulang jawaban di atas untuk melanjutkan.</small>
+    </div>`;
+  }
+
+  content += `
+      <button class="btn" onclick="submitAnswer('${grp}', '${loc}')">
+        ✅ Kirim Jawaban
+      </button>
+      <div id="feedback"></div>
+      <button class="btn btn-secondary" onclick="location.href='?'">
+        🏠 Dashboard</button>
+    </div>`;
+
+  app.innerHTML = content;
+  document.getElementById('answerInput').focus();
+}
+
+function submitAnswer(grp, loc) {
+  const L = parseInt(loc.slice(1));
+  const q = QUESTIONS['L' + L][grp];
+  const input = document.getElementById('answerInput').value;
+  const feedback = document.getElementById('feedback');
+
+  if (!input.trim()) {
+    feedback.innerHTML = '<div class="error">❌ Jawaban kosong!</div>';
+    return;
+  }
+
+  const progress = getProgress(grp)[loc] || {};
+  const attempts = (progress.attempts || 0) + 1;
+
+  if (checkAnswer(input, q.answer)) {
+    saveProgress(grp, loc, {
+      done: true,
+      answer: input.trim(),
+      attempts: attempts,
+      submittedAt: Date.now()
+    });
+    renderSuccess(grp, loc);
+  } else {
+    saveProgress(grp, loc, { attempts: attempts, lastWrong: input.trim() });
+    feedback.innerHTML = `<div class="error">
+      ❌ <strong>Jawaban salah!</strong> (Percobaan ke-${attempts})<br>
+      ${attempts >= 2 ? `💡 Hint: ${q.hint}` : 'Coba lagi, periksa spasi dan format.'}
+    </div>`;
+    if (attempts >= 5) {
+      setTimeout(() => renderQuestion(grp, loc), 1500);
+    }
+  }
+}
+
+function renderSuccess(grp, loc) {
+  const L = parseInt(loc.slice(1));
+  const stop = getStopNum(grp, loc);
+  const nextL = getNextLoc(loc);
+  const isLast = stop === 10;
+
+  let content = `
+    <div class="header"><h1>🎉 BENAR!</h1></div>
+    <div class="card">
+      <div class="success" style="font-size:1.1em;padding:20px;">
+        ✅ Jawaban kamu benar!<br>
+        <small style="font-weight:normal;opacity:0.9;">
+          Stop ${stop}/10 — ${LOKASI[L-1]}</small>
+      </div>`;
+
+  if (isLast) {
+    content += `<div style="background:#4c1d95;padding:25px;border-radius:12px;
+      border:3px solid #8b5cf6;text-align:center;margin-top:15px;">
+      <div style="font-size:1.5em;font-weight:bold;color:#e9d5ff;">
+        🏆 SEMUA SELESAI! 🏆</div>
+      <div style="color:#c4b5fd;margin-top:10px;">
+        Kembali ke titik start & serahkan lembar jawaban!</div>
+    </div>`;
+  } else {
+    content += `<div class="clue-box" style="margin-top:15px;">
+      <div class="label">🗝️ CLUE BERIKUTNYA</div>
+      <div class="clue-text">${CLUE[parseInt(nextL.slice(1)) - 1]}</div>
+    </div>`;
+  }
+
+  content += `
+    <button class="btn" onclick="location.href='?'" style="margin-top:15px;">
+      🏠 Kembali ke Dashboard</button>
+    </div>`;
+  app.innerHTML = content;
+}
+
+function renderDoneView(grp, loc, progress) {
+  const L = parseInt(loc.slice(1));
+  const q = QUESTIONS['L' + L][grp];
+  const stop = getStopNum(grp, loc);
+  const nextL = getNextLoc(loc);
+  const isLast = stop === 10;
+
+  let content = `
+    <div class="header"><h1>✅ SUDAH SELESAI</h1></div>
+    <div class="card">
+      <div class="success" style="margin-bottom:15px;">
+        Sudah dikerjakan di Stop ${stop}/10 — ${LOKASI[L-1]}
+      </div>
+      <div class="soal-box">
+        <div class="label">📝 SOAL</div>
+        <div class="pertanyaan">${q.text}</div>
+      </div>
+      <div style="margin-top:10px;">
+        <div style="color:#94a3b8;font-size:0.85em;margin-bottom:5px;">
+          Jawaban kamu:</div>
+        <div class="answer-preview">${progress.answer}</div>
+      </div>`;
+
+  if (!isLast) {
+    content += `<div class="clue-box" style="margin-top:15px;">
+      <div class="label">🗝️ CLUE BERIKUTNYA</div>
+      <div class="clue-text">${CLUE[parseInt(nextL.slice(1)) - 1]}</div>
+    </div>`;
+  } else {
+    content += `<div style="background:#4c1d95;padding:20px;border-radius:12px;
+      border:3px solid #8b5cf6;text-align:center;margin-top:15px;">
+      <div style="font-size:1.3em;font-weight:bold;color:#e9d5ff;">
+        🏆 KAMU SUDAH SELESAI! 🏆</div>
+    </div>`;
+  }
+
+  content += `
+    <button class="btn btn-secondary" onclick="location.href='?'"
+      style="margin-top:15px;">🏠 Dashboard</button>
+    </div>`;
+  app.innerHTML = content;
+}
+
+function renderDashboard(grp) {
+  const progress = getProgress(grp);
+  const doneCount = Object.values(progress).filter(p => p.done).length;
+  const percent = Math.round(doneCount / 10 * 100);
+  const startLoc = START_LOC[grp];
+  const startIdx = parseInt(startLoc.slice(1)) - 1;
+
+  let locList = '';
+  for (let i = 0; i < 10; i++) {
+    const L = ((grp.charCodeAt(0) - 65 + i) % 10) + 1;
+    const locCode = 'L' + L;
+    const isDone = progress[locCode]?.done;
+    const prevDone = i === 0 || progress[getLocForStop(grp, i)]?.done;
+    const isCurrent = !isDone && prevDone;
+    const status = isDone ? 'done' : (isCurrent ? 'current' : '');
+    const icon = isDone ? '✅' : (isCurrent ? '🎯' : '⬜');
+    locList += `<div class="loc-item ${status}">
+      <span>${icon} Stop ${i+1} — ${LOKASI[L-1]}</span>
+      ${isCurrent ? '<span>←</span>' : ''}
+    </div>`;
+  }
+
+  let nextAction = '';
+  if (doneCount === 0) {
+    nextAction = `<div style="background:#451a03;padding:14px;border-radius:8px;
+      border-left:4px solid #fbbf24;margin-bottom:15px;">
+      <div style="color:#fbbf24;font-weight:bold;margin-bottom:6px;">
+        🎯 MULAI DARI SINI</div>
+      <div style="color:#fed7aa;font-size:0.95em;">
+        Pergi ke <strong>${LOKASI[startIdx]}</strong><br>
+        Cari QR Kelompok ${grp} (kode ${KODE[grp]}) lalu scan!</div>
+    </div>`;
+  } else if (doneCount < 10) {
+    const nextStop = doneCount + 1;
+    const nextLoc = getLocForStop(grp, nextStop);
+    const nextLocIdx = parseInt(nextLoc.slice(1)) - 1;
+    nextAction = `<div style="background:#451a03;padding:14px;border-radius:8px;
+      border-left:4px solid #fbbf24;margin-bottom:15px;">
+      <div style="color:#fbbf24;font-weight:bold;margin-bottom:6px;">
+        ➡️ LANJUTKAN — STOP ${nextStop}/10</div>
+      <div style="color:#fed7aa;">
+        Cari QR Kelompok ${grp} di:<br>
+        <strong>${CLUE[nextLocIdx]}</strong></div>
+    </div>`;
+  } else {
+    nextAction = `<div style="background:#4c1d95;padding:20px;border-radius:12px;
+      border:3px solid #8b5cf6;text-align:center;margin-bottom:15px;">
+      <div style="font-size:1.4em;font-weight:bold;color:#e9d5ff;">
+        🎉 SEMUA SELESAI! 🎉</div>
+      <div style="color:#c4b5fd;margin-top:6px;">
+        Serahkan lembar jawaban ke guru!</div>
+    </div>`;
+  }
+
+  app.innerHTML = `
+    <div class="header"><h1>🏴‍☠️ TREASURE HUNT</h1>
+      <div class="sub">Kelompok ${grp} · ${KODE[grp]}</div></div>
+    <div class="card">
+      <h2>📊 Progress Kamu</h2>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:${percent}%">${doneCount}/10</div>
+      </div>
+      ${nextAction}
+      ${locList}
+      <button class="btn btn-secondary" onclick="logout()"
+        style="margin-top:12px;">🚪 Logout</button>
+    </div>`;
+}
+</script>
+</body>
+</html>
