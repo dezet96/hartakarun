@@ -126,21 +126,33 @@ body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
 </div>
 
 <script>
-// ========== DATA ==========
-const LOKASI = ['Perpustakaan','Kantin','Lab Komputer','Ruang Guru','Aula',
-                'Musholla','Pos Satpam','Parkiran','Tata Usaha','Koperasi'];
-const CLUE = [
-  'Tempat sunyi penuh rak buku',
-  'Cari bau gorengan saat istirahat',
-  'Ruangan ber-AC dengan banyak layar',
-  'Tempat para guru beristirahat',
-  'Ruangan besar untuk upacara',
-  'Tempat ibadah di sekolah',
-  'Pos penjaga di dekat gerbang',
-  'Deretan kendaraan diparkir rapi',
-  'Tempat urus surat dan administrasi',
-  'Toko kecil penjual alat tulis'
+// ========== DATA (SESUAI LOKASI ASLI) ==========
+const LOKASI = [
+  'Mimake',         // L1
+  'Nesastech',      // L2
+  'Bank Mini',      // L3
+  'Perpustakaan',   // L4
+  'Taman Joglo',    // L5
+  'MRC',            // L6
+  'Taman Duren',    // L7
+  'Parkiran Guru',  // L8
+  'Lapang Voli',    // L9
+  'Kantin'          // L10
 ];
+
+const CLUE = [
+  'Cari tempat penyimpanan helm (Mimake)',                   // Petunjuk ke L1
+  'Cari ruangan Nesastech, cek di belakang AC',              // Petunjuk ke L2
+  'Cari Bank Mini, periksa di pot bunga',                    // Petunjuk ke L3
+  'Cari Perpustakaan, lihat di area rak sepatu',             // Petunjuk ke L4
+  'Cari Taman Joglo, periksa di sekitaran joglo',            // Petunjuk ke L5
+  'Cari area MRC, lihat sekitarnya',                         // Petunjuk ke L6
+  'Cari Taman Duren, periksa sekitar taman',                 // Petunjuk ke L7
+  'Cari Parkiran Guru, cek di area jendela',                 // Petunjuk ke L8
+  'Cari Lapang Voli, periksa di sekitar lapang',             // Petunjuk ke L9
+  'Cari Kantin, periksa sekitar kantin'                      // Petunjuk ke L10
+];
+
 const KODE = { A:'A7X9', B:'B2K4', C:'C5M8', D:'D3P6', E:'E8N1',
                F:'F4R7', G:'G6T2', H:'H9W5', I:'I1Y3', J:'J7Z8' };
 
@@ -351,21 +363,17 @@ function openScanner() {
     { facingMode: "environment" }, 
     config,
     (decodedText) => {
-      // Callback saat QR berhasil di-scan
       html5QrCode.stop().then(() => {
         document.getElementById('scanner-modal').style.display = 'none';
-        // Cek apakah URL valid dari game kita
         if (decodedText.includes('loc=') && decodedText.includes('grp=')) {
           window.location.href = decodedText;
         } else {
           alert("QR Code tidak valid! Pastikan ini QR dari Treasure Hunt.");
-          openScanner(); // Buka lagi kameranya
+          openScanner(); 
         }
       }).catch((err) => console.error("Gagal stop scanner", err));
     },
-    (errorMessage) => {
-      // Abaikan error pembacaan per frame
-    }
+    (errorMessage) => {}
   ).catch((err) => {
     console.error(err);
     alert("Gagal membuka kamera. Pastikan Anda mengizinkan akses kamera di browser.");
@@ -571,8 +579,6 @@ function renderSuccess(grp, loc) {
     content += `<div style="background:#4c1d95;padding:25px;border-radius:12px;border:3px solid #8b5cf6;text-align:center;margin-top:15px;"><div style="font-size:1.5em;font-weight:bold;color:#e9d5ff;">🏆 SEMUA SELESAI! 🏆</div><div style="color:#c4b5fd;margin-top:10px;">Kembali ke titik start & serahkan lembar jawaban!</div></div>`;
   } else {
     content += `<div class="clue-box" style="margin-top:15px;"><div class="label">🗝️ CLUE BERIKUTNYA</div><div class="clue-text">${CLUE[parseInt(nextL.slice(1)) - 1]}</div></div>`;
-    
-    // TOMBOL SCAN LANGSUNG
     content += `<button class="btn btn-scan" onclick="openScanner()">📷 Scan QR Lokasi Berikutnya</button>`;
   }
   content += `<button class="btn btn-secondary" onclick="location.href='?'" style="margin-top:15px;">🏠 Kembali ke Dashboard</button></div>`;
@@ -683,7 +689,6 @@ function renderDashboard(grp) {
 
       ${nextAction}
       
-      <!-- TOMBOL SCAN UTAMA -->
       <button class="btn btn-scan" style="margin-bottom:15px;" onclick="openScanner()">
         📷 Buka Kamera & Scan QR
       </button>
